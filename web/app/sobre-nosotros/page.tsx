@@ -18,22 +18,25 @@ export default function SobreNosotrosPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6 text-blue-marine">Nuestra Historia</h2>
               <p className="text-lg mb-6">
-                Caribbean Embedded Labs nació en 2015 con la visión de ofrecer soluciones electrónicas de alta calidad adaptadas a las necesidades específicas de cada cliente. Desde entonces, hemos crecido hasta convertirnos en un referente en el diseño de PCBs y sistemas embebidos en la región del Caribe.
+                Caribbean Embedded Labs nació de la pasión por la electrónica y los sistemas embebidos de un grupo de ingenieros dominicanos con amplia experiencia en el sector industrial. Desde nuestros inicios, nos hemos especializado en el diseño de hardware, firmware y soluciones IoT personalizadas para las necesidades específicas de cada cliente.
               </p>
               <p className="text-lg mb-6">
-                Nuestro equipo está formado por ingenieros con amplia experiencia en electrónica, firmware, IoT y fabricación, lo que nos permite abordar proyectos complejos y ofrecer soluciones integrales desde el diseño hasta la producción.
+                Nuestra trayectoria comenzó con proyectos de monitoreo industrial y ha evolucionado hasta convertirnos en referentes en el diseño de PCBs, desarrollo de firmware y sistemas completos de telemetría para diversas industrias en la región del Caribe.
               </p>
               <p className="text-lg mb-6">
-                A lo largo de nuestra trayectoria, hemos colaborado con empresas de diversos sectores, desde startups hasta grandes corporaciones, ayudándoles a transformar sus ideas en productos electrónicos de alta calidad.
+                Con más de 7 años de experiencia en el desarrollo de soluciones embebidas, hemos creado desde módems WiFi para recolección de datos mediante comunicación ModBus, hasta sistemas completos de monitoreo de KPIs en líneas de producción, permitiendo a nuestros clientes tomar decisiones basadas en datos en tiempo real.
+              </p>
+              <p className="text-lg mb-6">
+                Nuestra experiencia abarca desde el diseño de hardware hasta la implementación de complejos protocolos de comunicación (Modbus, TCP, BLE), desarrollo de firmware especializado, y creación de servidores web embebidos para configuración y monitoreo. Cada solución es diseñada pensando en su escalabilidad y mantenimiento a largo plazo.
               </p>
             </div>
 
             <div className="relative">
-              <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
+              <div className="rounded-lg overflow-hidden bg-muted/30 border shadow-lg p-2">
                 <img
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/cel_lab.png"
                   alt="Equipo de Caribbean Embedded Labs"
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground p-4 rounded-lg shadow-lg">
@@ -90,20 +93,20 @@ export default function SobreNosotrosPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <Card className="overflow-hidden">
               <div className="aspect-square relative">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
-                  alt="Ingeniero Electrónico"
+                  src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
+                  alt="Ingeniero de Hardware Senior"
                   className="w-full h-full object-cover"
                 />
               </div>
               <CardContent className="p-4">
-                <h3 className="font-bold text-lg">Juan Pérez</h3>
-                <p className="text-sm text-muted-foreground mb-2">Ingeniero Electrónico Senior</p>
+                <h3 className="font-bold text-lg">Ramses García</h3>
+                <p className="text-sm text-muted-foreground mb-2">Ingeniero de Hardware Senior</p>
                 <p className="text-sm">
-                  Especialista en diseño de PCBs complejas y sistemas de potencia.
+                  Especialista en diseño de PCBs, firmware y pruebas de sistemas embebidos. Experiencia en Design for Manufacturing.
                 </p>
               </CardContent>
             </Card>
@@ -111,50 +114,33 @@ export default function SobreNosotrosPage() {
             <Card className="overflow-hidden">
               <div className="aspect-square relative">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
-                  alt="Ingeniera de Firmware"
+                  src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2076&q=80"
+                  alt="Desarrollador de Firmware"
                   className="w-full h-full object-cover"
                 />
               </div>
               <CardContent className="p-4">
-                <h3 className="font-bold text-lg">María Rodríguez</h3>
-                <p className="text-sm text-muted-foreground mb-2">Ingeniera de Firmware</p>
+                <h3 className="font-bold text-lg">Reynaldo Veloz</h3>
+                <p className="text-sm text-muted-foreground mb-2">Desarrollador de Firmware</p>
                 <p className="text-sm">
-                  Experta en desarrollo de firmware para microcontroladores y sistemas embebidos.
+                  Experto en desarrollo de firmware para microcontroladores ESP32, STM32 y diseño de PCBs. Especialista en C/C++ y aplicaciones de machine learning para dispositivos embebidos.
                 </p>
               </CardContent>
             </Card>
-
+            
             <Card className="overflow-hidden">
               <div className="aspect-square relative">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
-                  alt="Ingeniero IoT"
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                  alt="Ingeniero de Diseño Mecánico"
                   className="w-full h-full object-cover"
                 />
               </div>
               <CardContent className="p-4">
-                <h3 className="font-bold text-lg">Carlos Gómez</h3>
-                <p className="text-sm text-muted-foreground mb-2">Ingeniero IoT</p>
+                <h3 className="font-bold text-lg">Pankaj Choudhary</h3>
+                <p className="text-sm text-muted-foreground mb-2">Ingeniero de Diseño Mecánico Senior</p>
                 <p className="text-sm">
-                  Especializado en conectividad inalámbrica y desarrollo de soluciones IoT.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
-              <div className="aspect-square relative">
-                <img
-                  src="/placeholder.svg?height=300&width=300"
-                  alt="Directora de Proyectos"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <CardContent className="p-4">
-                <h3 className="font-bold text-lg">Laura Martínez</h3>
-                <p className="text-sm text-muted-foreground mb-2">Directora de Proyectos</p>
-                <p className="text-sm">
-                  Responsable de la gestión y coordinación de proyectos complejos.
+                  Especialista en diseño mecánico de enclosures para dispositivos electrónicos, análisis térmico y estructural, y optimización de productos para fabricación a escala industrial.
                 </p>
               </CardContent>
             </Card>
@@ -165,26 +151,55 @@ export default function SobreNosotrosPage() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 text-blue-marine">Nuestras Instalaciones</h2>
+            <h2 className="text-3xl font-bold mb-4 text-blue-marine">Nuestras Capacidades</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Contamos con instalaciones modernas equipadas con la última tecnología para el diseño y prototipado de sistemas electrónicos.
+              Contamos con infraestructura híbrida que combina instalaciones físicas y laboratorios remotos para el diseño, desarrollo y validación de soluciones electrónicas.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
+            <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg relative">
               <img
-                src="/placeholder.svg?height=400&width=600"
-                alt="Laboratorio de Electrónica"
+                src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Laboratorio de Diseño de Hardware"
                 className="w-full h-full object-cover"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <h3 className="text-white font-bold">Diseño de Hardware</h3>
+                <p className="text-white/80 text-sm">Estaciones de trabajo con herramientas CAD avanzadas</p>
+              </div>
             </div>
-            <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
+            <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg relative">
               <img
-                src="/placeholder.svg?height=400&width=600"
-                alt="Área de Prototipado"
+                src="https://images.unsplash.com/photo-1580894908361-967195033215?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                alt="Área de Desarrollo y Testing"
                 className="w-full h-full object-cover"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <h3 className="text-white font-bold">Laboratorio de Testing</h3>
+                <p className="text-white/80 text-sm">Equipamiento para validación de prototipos y pruebas de sistemas</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+              <h3 className="font-bold mb-2 text-blue-marine">Diseño para Manufactura</h3>
+              <p className="text-sm text-muted-foreground">
+                Optimizamos cada diseño para su fabricación eficiente, considerando costos, disponibilidad de componentes y escalabilidad.
+              </p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+              <h3 className="font-bold mb-2 text-blue-marine">IoT & Conectividad</h3>
+              <p className="text-sm text-muted-foreground">
+                Expertos en desarrollo de soluciones IoT con conectividad WiFi, 4G, BLE y protocolos industriales como Modbus.
+              </p>
+            </div>
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
+              <h3 className="font-bold mb-2 text-blue-marine">Análisis de Datos</h3>
+              <p className="text-sm text-muted-foreground">
+                Transformamos datos operativos en información valiosa mediante dashboards personalizados y algoritmos de análisis.
+              </p>
             </div>
           </div>
         </div>
@@ -208,7 +223,7 @@ export default function SobreNosotrosPage() {
               </div>
               <div className="hidden md:block">
                 <img
-                  src="/placeholder.svg?height=300&width=400"
+                  src="/coding_fw.jpg"
                   alt="Colaboración en proyectos"
                   className="w-full rounded-lg"
                 />
