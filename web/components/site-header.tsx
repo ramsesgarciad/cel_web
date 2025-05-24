@@ -67,12 +67,22 @@ export function SiteHeader() {
                   Validación y Fabricación
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/servicios/diseno-mecanico" className="cursor-pointer">
+                  Diseño Mecánico
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Link href="/proyectos" className="text-sm font-medium hover:text-primary flex items-center gap-1">
             <Briefcase className="h-4 w-4" />
             <span>Proyectos</span>
+          </Link>
+
+          <Link href="/productos" className="text-sm font-medium hover:text-primary flex items-center gap-1">
+            <Circuit className="h-4 w-4" />
+            <span>Productos</span>
           </Link>
 
           <Link href="/industrias" className="text-sm font-medium hover:text-primary flex items-center gap-1">
@@ -82,7 +92,7 @@ export function SiteHeader() {
 
           <Link href="/sobre-nosotros" className="text-sm font-medium hover:text-primary flex items-center gap-1">
             <Users className="h-4 w-4" />
-            <span>Sobre Nosotros</span>
+            <span>Nosotros</span>
           </Link>
 
           <Link href="/blog" className="text-sm font-medium hover:text-primary flex items-center gap-1">
@@ -142,13 +152,18 @@ export function SiteHeader() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
+                <Link href="/productos" className="cursor-pointer">
+                  Productos
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/industrias" className="cursor-pointer">
                   Industrias
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/sobre-nosotros" className="cursor-pointer">
-                  Sobre Nosotros
+                  Nosotros
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>

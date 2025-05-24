@@ -19,7 +19,7 @@ export default function MicrocontroladoresPage() {
               <div className="relative">
                 <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
                   <img
-                    src="/placeholder.svg?height=400&width=600"
+                    src="/coding_fw.jpg"
                     alt="Programación de microcontroladores"
                     className="w-full h-full object-cover"
                   />
@@ -187,30 +187,30 @@ export default function MicrocontroladoresPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-square rounded-lg overflow-hidden bg-background border">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/fw_0.png"
                   alt="Programación de microcontroladores"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border mt-8">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/fw_1.png"
                   alt="Depuración de firmware"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/fw_2.png"
                   alt="Desarrollo de drivers"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border mt-8">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/fw_3.png"
                   alt="Testing de firmware"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </div>

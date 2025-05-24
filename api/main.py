@@ -23,7 +23,7 @@ app = FastAPI(
 def setup_cors_middleware(app: FastAPI) -> None:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3002", "http://127.0.0.1:3002"],
+        allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3002", "http://127.0.0.1:3002", "http://161.97.172.97:3000"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -61,9 +61,7 @@ async def health_check():
     return JSONResponse(
         status_code=200,
         content={
-            "status": "healthy",
-            "version": settings.VERSION,
-            "environment": settings.ENVIRONMENT
+            "status": "healthy"
         }
     )
 

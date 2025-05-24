@@ -2,7 +2,7 @@
  * API client for communicating with the FastAPI backend
  */
 
-const API_URL = 'http://localhost:8001/api';
+const API_URL = 'http://161.97.172.97:8000/api';
 
 /**
  * Fetch wrapper with authentication and error handling
@@ -12,7 +12,7 @@ export const fetchWithAuth = async (url, options = {}) => {
     console.log(`Haciendo petición autenticada a: ${url}`);
     
     // Obtener el token de autenticación
-    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('authToken') : null;
     
     // En desarrollo, no mostrar advertencia si no hay token
     if (token) {
@@ -32,7 +32,7 @@ export const fetchWithAuth = async (url, options = {}) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
     
-    // Usar el puerto 8001 para la API
+    // Usar la URL de la API configurada
     const apiUrl = API_URL;
     const fullUrl = url.startsWith('http') ? url : `${apiUrl}${url}`;
     
@@ -438,7 +438,7 @@ export const getProjects = async () => {
     console.log("Obteniendo proyectos directamente con fetch");
     
     // Obtener el token de autenticación
-    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem('authToken') : null;
     
     const url = `${API_URL}/projects`;
     console.log("URL completa:", url);

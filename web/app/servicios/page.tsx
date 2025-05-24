@@ -278,7 +278,7 @@ export default function ServiciosPage() {
               </div>
               <div className="hidden md:block">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
+                  src="/hans-pcb.png height=300&width=500"
                   alt="Equipo de Caribbean Embedded Labs"
                   className="rounded-lg"
                 />

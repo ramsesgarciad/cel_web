@@ -1,9 +1,73 @@
+"use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react"
 import { PageHeader } from "@/components/page-header"
 
 export default function ContactoPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    project: "",
+    message: ""
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!formData.name || !formData.email || !formData.project || !formData.message) {
+      setError('Por favor completa todos los campos requeridos')
+      return
+    }
+    
+    setError('')
+    setIsSubmitting(true)
+    
+    try {
+      // Enviar datos al endpoint de API
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Error al enviar el mensaje')
+      }
+      
+      // Mostrar mensaje de éxito y resetear el formulario
+      setSubmitted(true)
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        project: "",
+        message: ""
+      })
+    } catch (err) {
+      console.error('Error al enviar el formulario:', err)
+      setError('Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
   return (
     <div>
       <PageHeader
@@ -25,66 +89,116 @@ export default function ContactoPage() {
 
               <Card>
                 <CardContent className="pt-6">
-                  <form className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
+                  {submitted ? (
+                    <div className="flex flex-col items-center justify-center py-8 text-center">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <CheckCircle className="h-8 w-8 text-green-600" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 text-green-600">¡Mensaje enviado!</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Gracias por contactarnos. Nos pondremos en contacto contigo lo antes posible mediante el teléfono o email proporcionado.
+                      </p>
+                      <Button 
+                        type="button" 
+                        onClick={() => setSubmitted(false)}
+                        className="bg-primary text-primary-foreground hover:bg-blue-light"
+                      >
+                        Enviar otro mensaje
+                      </Button>
+                    </div>
+                  ) : (
+                    <form className="space-y-6" onSubmit={handleSubmit}>
+                      {error && (
+                        <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">
+                          {error}
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
                         <label htmlFor="name" className="text-sm font-medium">
                           Nombre
                         </label>
-                        <input id="name" type="text" className="w-full p-2 border rounded-md" placeholder="Tu nombre" />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          className="w-full p-2 border rounded-md"
-                          placeholder="tu@email.com"
+                        <input 
+                          id="name" 
+                          type="text" 
+                          className="w-full p-2 border rounded-md" 
+                          placeholder="Tu nombre" 
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
                         />
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="company" className="text-sm font-medium">
-                        Empresa
-                      </label>
-                      <input
-                        id="company"
-                        type="text"
-                        className="w-full p-2 border rounded-md"
-                        placeholder="Nombre de tu empresa"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="project" className="text-sm font-medium">
-                        Tipo de Proyecto
-                      </label>
-                      <select id="project" className="w-full p-2 border rounded-md">
-                        <option value="">Selecciona una opción</option>
-                        <option value="pcb">Diseño de PCB</option>
-                        <option value="firmware">Programación de Microcontroladores</option>
-                        <option value="prototype">Prototipado Electrónico</option>
-                        <option value="iot">Desarrollo IoT</option>
-                        <option value="manufacturing">Fabricación</option>
-                        <option value="other">Otro</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium">
-                        Mensaje
-                      </label>
-                      <textarea
-                        id="message"
-                        className="w-full p-2 border rounded-md"
-                        rows={4}
-                        placeholder="Cuéntanos sobre tu proyecto o idea"
-                      ></textarea>
-                    </div>
-                    <Button className="w-full bg-primary text-primary-foreground hover:bg-blue-light">
-                      Enviar mensaje
-                    </Button>
+                        <div className="space-y-2">
+                          <label htmlFor="email" className="text-sm font-medium">
+                            Email
+                          </label>
+                          <input
+                            id="email"
+                            type="email"
+                            className="w-full p-2 border rounded-md"
+                            placeholder="tu@email.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="company" className="text-sm font-medium">
+                          Empresa
+                        </label>
+                        <input
+                          id="company"
+                          type="text"
+                          className="w-full p-2 border rounded-md"
+                          placeholder="Nombre de tu empresa"
+                          value={formData.company}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="project" className="text-sm font-medium">
+                          Tipo de Proyecto
+                        </label>
+                        <select 
+                          id="project" 
+                          className="w-full p-2 border rounded-md"
+                          value={formData.project}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="">Selecciona una opción</option>
+                          <option value="Diseño de PCB">Diseño de PCB</option>
+                          <option value="Programación de Microcontroladores">Programación de Microcontroladores</option>
+                          <option value="Prototipado Electrónico">Prototipado Electrónico</option>
+                          <option value="Desarrollo IoT">Desarrollo IoT</option>
+                          <option value="Fabricación">Fabricación</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="message" className="text-sm font-medium">
+                          Mensaje
+                        </label>
+                        <textarea
+                          id="message"
+                          className="w-full p-2 border rounded-md"
+                          rows={4}
+                          placeholder="Cuéntanos sobre tu proyecto o idea"
+                          value={formData.message}
+                          onChange={handleChange}
+                          required
+                        ></textarea>
+                      </div>
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-primary text-primary-foreground hover:bg-blue-light"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Enviando...' : 'Enviar mensaje'}
+                      </Button>
                   </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -96,8 +210,8 @@ export default function ContactoPage() {
                   <div className="flex items-start gap-3">
                     <Phone className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="font-medium">Teléfono</h4>
-                      <p className="text-muted-foreground">+1 (809) 555-1234</p>
+                      <h4 className="font-medium">Teléfono/WhatsApp</h4>
+                      <p className="text-muted-foreground">+1 (829) 479-0604</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -151,7 +265,9 @@ export default function ContactoPage() {
                 <h3 className="text-2xl font-bold mb-4 text-blue-marine">Síguenos</h3>
                 <div className="flex space-x-4">
                   <a
-                    href="#"
+                    href="https://facebook.com/caribbeanembeddedlabs"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-full transition-colors"
                   >
                     <svg
@@ -169,7 +285,9 @@ export default function ContactoPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://twitter.com/CELabs_RD"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-full transition-colors"
                   >
                     <svg
@@ -187,7 +305,9 @@ export default function ContactoPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://instagram.com/celabs_rd"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-full transition-colors"
                   >
                     <svg
@@ -207,7 +327,9 @@ export default function ContactoPage() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://linkedin.com/company/caribbean-embedded-labs"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-primary/10 hover:bg-primary/20 text-primary p-3 rounded-full transition-colors"
                   >
                     <svg

@@ -1,5 +1,5 @@
 // Configuración base para las llamadas a la API
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://161.97.172.97:8000/api"
 
 // Función para obtener el token de autenticación del almacenamiento local
 const getAuthToken = () => {
@@ -40,11 +40,33 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
 }
 
 // Función para iniciar sesión
-export async function login(email: string, password: string) {
-  return fetchApi("/auth/login", {
+export async function login(email: string, password: string, isAdmin = false) {
+  const formData = new FormData();
+  formData.append('username', email); // El backend espera 'username' para el email
+  formData.append('password', password);
+  
+  const endpoint = isAdmin ? "/auth/admin/login" : "/auth/login";
+  
+  // Bypass fetchApi para este caso especial ya que necesitamos enviar form-data
+  const response = await fetch(`${API_URL}${endpoint}`, {
     method: "POST",
-    body: JSON.stringify({ email, password }),
-  })
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || "Error en el inicio de sesión");
+  }
+
+  const data = await response.json();
+  
+  // Guardar el token y los datos del usuario en el almacenamiento local
+  if (typeof window !== "undefined" && data.access_token) {
+    localStorage.setItem("authToken", data.access_token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
+  
+  return data;
 }
 
 // Función para cerrar sesión

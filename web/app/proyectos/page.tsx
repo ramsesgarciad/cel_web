@@ -18,25 +18,85 @@ export default function ProyectosPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Sistema de monitorización industrial"
+                  src="/reclouser_itc_iec101.png"
+                  alt="Transformación Digital con IoT en Equipos Antiguos"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Sistema de Monitorización Industrial</h3>
+                  <h3 className="text-white font-bold text-lg">Transformación Digital con IoT en Equipos Antiguos</h3>
                 </div>
               </div>
               <CardContent className="pt-4">
                 <p className="text-muted-foreground mb-4">
-                  Desarrollo de un sistema completo de monitorización para una planta industrial, incluyendo sensores,
-                  comunicación inalámbrica y dashboard de control.
+                  Implementación de soluciones IoT en equipos industriales antiguos sin conexión a internet, superando retos 
+                  de robustez en entornos hostiles mediante el uso de transceptores especializados como el ISO1500DBQR.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">IoT</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">RS485</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">IEC101</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">IoT Industrial</span>
+                </div>
+                <Link href="/proyectos/transformacion-digital-iot">
+                  <Button variant="outline" className="w-full">
+                    Ver detalles
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="aspect-video relative">
+                <img
+                  src="/sistema_de_turnos.png"
+                  alt="Sistema de Gestión de Turnos"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                  <h3 className="text-white font-bold text-lg">Sistema de Gestión de Turnos</h3>
+                </div>
+              </div>
+              <CardContent className="pt-4">
+                <p className="text-muted-foreground mb-4">
+                  Sistema de gestión de turnos basado en Raspberry Pi que permite seleccionar el tipo de turno e imprimir tickets, 
+                  con capacidad multiusuario, asignación de prioridades y análisis estadístico de servicios y tiempos de respuesta.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Raspberry Pi</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Atención al Cliente</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Análisis de Datos</span>
+                </div>
+                <Link href="/proyectos/sistema-gestion-turnos">
+                  <Button variant="outline" className="w-full">
+                    Ver detalles
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="aspect-video relative">
+                <img
+                  src="/fabrica.png"
+                  alt="Sistema de Monitoreo de KPI de Producción"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                  <h3 className="text-white font-bold text-lg">Sistema de Monitoreo de KPI de Producción</h3>
+                </div>
+              </div>
+              <CardContent className="pt-4">
+                <p className="text-muted-foreground mb-4">
+                  Sistema de monitoreo en tiempo real que cuenta los pulsos de las máquinas para obtener su velocidad de trabajo 
+                  y calcular KPIs como OEE, tiempo de producción, eficiencia y cantidad de productos rechazados.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">OEE</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Tiempo Real</span>
                   <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Industria 4.0</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Monitorización</span>
                 </div>
-                <Link href="/proyectos/monitorizacion-industrial">
+                <Link href="/proyectos/monitoreo-kpi-produccion">
                   <Button variant="outline" className="w-full">
                     Ver detalles
                     <ChevronRight className="ml-2 h-4 w-4" />
@@ -48,25 +108,25 @@ export default function ProyectosPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Dispositivo médico portátil"
+                  src="/cuarto_frio.png"
+                  alt="Monitoreo de Temperatura y Humedad para Cuartos Fríos"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Dispositivo Médico Portátil</h3>
+                  <h3 className="text-white font-bold text-lg">Monitoreo de Temperatura y Humedad para Cuartos Fríos</h3>
                 </div>
               </div>
               <CardContent className="pt-4">
                 <p className="text-muted-foreground mb-4">
-                  Diseño y desarrollo de un dispositivo médico portátil para monitorización de signos vitales, con
-                  conectividad Bluetooth y bajo consumo energético.
+                  Sistema de monitoreo con sensores IP68 conectados por RS485 que permite supervisar múltiples puntos de temperatura y humedad
+                  en cuartos fríos con alertas en tiempo real cuando los valores salen del rango operativo.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Salud</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Bluetooth</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Bajo Consumo</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">IP68</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">RS485</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Alertas</span>
                 </div>
-                <Link href="/proyectos/dispositivo-medico">
+                <Link href="/proyectos/monitoreo-cuartos-frios">
                   <Button variant="outline" className="w-full">
                     Ver detalles
                     <ChevronRight className="ml-2 h-4 w-4" />
@@ -78,115 +138,24 @@ export default function ProyectosPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Sistema de riego inteligente"
+                  src="/medidor_pfc.png"
+                  alt="Sistema de Medición de Energía Trifásica"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Sistema de Riego Inteligente</h3>
+                  <h3 className="text-white font-bold text-lg">Sistema de Medición de Energía Trifásica</h3>
                 </div>
               </div>
               <CardContent className="pt-4">
                 <p className="text-muted-foreground mb-4">
-                  Desarrollo de un sistema de riego inteligente para agricultura, con sensores de humedad, control
-                  remoto y optimización del consumo de agua.
+                  Solución integral para medición de energía en sistemas trifásicos con interfaz táctil, conectividad de red, capacidad de ejecución de scripts en MicroPython y módulos de expansión para relés.
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Agricultura</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">LoRa</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Sostenibilidad</span>
-                </div>
-                <Link href="/proyectos/riego-inteligente">
-                  <Button variant="outline" className="w-full">
-                    Ver detalles
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
-              <div className="aspect-video relative">
-                <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Sistema de control domótico"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Sistema de Control Domótico</h3>
-                </div>
-              </div>
-              <CardContent className="pt-4">
-                <p className="text-muted-foreground mb-4">
-                  Diseño e implementación de un sistema de control domótico para viviendas, con gestión de iluminación,
-                  climatización y seguridad mediante aplicación móvil.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Domótica</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">WiFi</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">App Móvil</span>
-                </div>
-                <Link href="/proyectos/control-domotico">
-                  <Button variant="outline" className="w-full">
-                    Ver detalles
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
-              <div className="aspect-video relative">
-                <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Sistema de gestión energética"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Sistema de Gestión Energética</h3>
-                </div>
-              </div>
-              <CardContent className="pt-4">
-                <p className="text-muted-foreground mb-4">
-                  Desarrollo de un sistema para monitorización y optimización del consumo energético en edificios
-                  comerciales, con integración de energías renovables.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Energía</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">ESP32</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">MicroPython</span>
                   <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">IoT</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Sostenibilidad</span>
                 </div>
-                <Link href="/proyectos/gestion-energetica">
-                  <Button variant="outline" className="w-full">
-                    Ver detalles
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
-              <div className="aspect-video relative">
-                <img
-                  src="/placeholder.svg?height=300&width=500"
-                  alt="Dispositivo de seguimiento de activos"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg">Dispositivo de Seguimiento de Activos</h3>
-                </div>
-              </div>
-              <CardContent className="pt-4">
-                <p className="text-muted-foreground mb-4">
-                  Diseño de un dispositivo para seguimiento y localización de activos en tiempo real, con conectividad
-                  GPS/GSM y autonomía de varios meses.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">GPS</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">GSM</span>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Bajo Consumo</span>
-                </div>
-                <Link href="/proyectos/seguimiento-activos">
+                <Link href="/proyectos/sistema-medicion-energia-trifasica">
                   <Button variant="outline" className="w-full">
                     Ver detalles
                     <ChevronRight className="ml-2 h-4 w-4" />

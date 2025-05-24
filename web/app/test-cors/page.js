@@ -14,7 +14,7 @@ export default function TestCorsPage() {
         setError('');
         
         // Test the CORS test endpoint
-        const response = await fetch('http://localhost:8000/api/test-cors', {
+        const response = await fetch('http://161.97.172.97:8000/api/test-cors', {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -48,7 +48,7 @@ export default function TestCorsPage() {
       formData.append('username', 'admin@example.com');
       formData.append('password', 'admin123');
       
-      const response = await fetch('http://localhost:8000/api/auth/login', {
+      const response = await fetch('http://161.97.172.97:8000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

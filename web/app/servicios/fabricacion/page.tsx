@@ -68,28 +68,28 @@ export default function FabricacionPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-square rounded-lg overflow-hidden bg-background border">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/hv1.jpg"
                   alt="Validación de PCB"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border mt-8">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/hv2.jpg"
                   alt="Fabricación de PCB"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/hv3.jpg"
                   alt="Testing de PCB"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="aspect-square rounded-lg overflow-hidden bg-background border mt-8">
                 <img
-                  src="/placeholder.svg?height=300&width=300"
+                  src="/hv4.jpg"
                   alt="Ensamblaje de PCB"
                   className="w-full h-full object-cover"
                 />
@@ -241,7 +241,7 @@ export default function FabricacionPage() {
             <div className="order-2 md:order-1">
               <div className="aspect-video rounded-lg overflow-hidden bg-white/10 border shadow-lg">
                 <img
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/qc_pcb.jpg"
                   alt="Control de calidad"
                   className="w-full h-full object-cover"
                 />

@@ -19,7 +19,7 @@ export default function IoTPage() {
               <div className="relative">
                 <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
                   <img
-                    src="/placeholder.svg?height=400&width=600"
+                    src="/dispositivos_iot.png"
                     alt="Dispositivo IoT"
                     className="w-full h-full object-cover"
                   />
@@ -227,9 +227,9 @@ export default function IoTPage() {
             <div className="relative">
               <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
                 <img
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/arquitectura_iot.png"
                   alt="Arquitectura IoT"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground p-4 rounded-lg shadow-lg">

@@ -71,7 +71,7 @@ export default function DisenoPCBsPage() {
             <div className="relative">
               <div className="aspect-video rounded-lg overflow-hidden bg-muted/30 border shadow-lg">
                 <img
-                  src="/placeholder.svg?height=400&width=600"
+                  src="/professional-sch-en.gif?height=400&width=600"
                   alt="Diseño de PCB"
                   className="w-full h-full object-cover"
                 />
@@ -145,9 +145,9 @@ export default function DisenoPCBsPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
+                  src="/pcb_single.png"
                   alt="PCB de una capa"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
                   <h3 className="text-white font-bold text-lg">PCBs de Una Capa</h3>
@@ -163,9 +163,9 @@ export default function DisenoPCBsPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
+                  src="/pcb_double.png"
                   alt="PCB de doble capa"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
                   <h3 className="text-white font-bold text-lg">PCBs de Doble Capa</h3>
@@ -182,9 +182,9 @@ export default function DisenoPCBsPage() {
             <Card className="overflow-hidden">
               <div className="aspect-video relative">
                 <img
-                  src="/placeholder.svg?height=300&width=500"
+                  src="/pcb_multi.png"
                   alt="PCB multicapa"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
                   <h3 className="text-white font-bold text-lg">PCBs Multicapa</h3>

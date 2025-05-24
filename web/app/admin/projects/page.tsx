@@ -87,13 +87,13 @@ export default function ProjectsAdmin() {
       
       try {
         // Obtener el token de autenticación
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('authToken')
         if (!token) {
           console.warn("No hay token de autenticación, la petición podría fallar")
         }
         
         // Hacer una petición directa al endpoint de proyectos
-        const apiUrl = "http://127.0.0.1:8001/api/projects"
+        const apiUrl = "http://161.97.172.97:8000/api/projects"
         console.log("Haciendo petición a:", apiUrl)
         
         const headers: HeadersInit = {
