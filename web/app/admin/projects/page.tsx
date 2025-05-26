@@ -93,7 +93,7 @@ export default function ProjectsAdmin() {
         }
         
         // Hacer una petición directa al endpoint de proyectos
-        const apiUrl = "http://161.97.172.97:8000/api/projects"
+        const apiUrl = "https://caribbeanembeddedlabs.com/api/projects"
         console.log("Haciendo petición a:", apiUrl)
         
         const headers: HeadersInit = {

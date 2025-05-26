@@ -17,7 +17,7 @@ import {
   ChevronRight,
   ChevronLeft,
   FileType,
-  File3d,
+  File,
   Clipboard
 } from 'lucide-react';
 
@@ -755,7 +755,7 @@ export default function DashboardPage() {
                               ) : doc.type === 'image' ? (
                                 <FileType className="text-purple-500 mr-3 flex-shrink-0" size={24} />
                               ) : doc.type === '3d' ? (
-                                <File3d className="text-blue-500 mr-3 flex-shrink-0" size={24} />
+                                <File className="text-blue-500 mr-3 flex-shrink-0" size={24} />
                               ) : (
                                 <Clipboard className="text-gray-500 mr-3 flex-shrink-0" size={24} />
                               )}
