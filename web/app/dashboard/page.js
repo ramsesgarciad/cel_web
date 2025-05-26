@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import ProgressCircle from '@/components/ProgressCircle';
-import { projectsApi } from '@/lib/api';
+import { projectsApi, tasksApi, updatesApi, documentsApi } from '@/lib/api';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -116,67 +116,96 @@ export default function DashboardPage() {
         }
       }
       
-      // Para proyectos reales, buscar en la lista que ya tenemos
-      const selectedProject = projects.find(p => p.id.toString() === projectId.toString());
-      if (!selectedProject) {
-        setError('Proyecto no encontrado');
-        setLoadingProject(false);
-        return;
-      }
-      
-      setProject(selectedProject);
-      
-      // Obtener tareas del proyecto
+      // Para proyectos reales, obtener detalles del proyecto directamente de la API
       try {
-        const projectTasks = await projectsApi.tasks.getByProjectId(projectId);
-        console.log('Tareas obtenidas del API:', projectTasks);
-        setTasks(projectTasks || []);
-      } catch (taskErr) {
-        console.error('Error al obtener tareas:', taskErr);
-        // Usar tareas del proyecto si existen
-        setTasks(selectedProject.tasks || []);
-      }
-      
-      // Obtener actualizaciones del proyecto
-      try {
-        const projectUpdates = await projectsApi.updates.getByProjectId(projectId);
-        console.log('Actualizaciones obtenidas del API:', projectUpdates);
-        setUpdates(projectUpdates || []);
-      } catch (updateErr) {
-        console.error('Error al obtener actualizaciones:', updateErr);
-        // Usar actualizaciones del proyecto si existen
-        setUpdates(selectedProject.updates || []);
-      }
-      
-      // Obtener documentos del proyecto
-      try {
-        const projectDocs = await projectsApi.documents.getByProjectId(projectId);
-        console.log('Documentos obtenidos del API:', projectDocs);
-        setDocuments(projectDocs || []);
-      } catch (docErr) {
-        console.error('Error al obtener documentos:', docErr);
-        // Usar documentos del proyecto si existen
-        setDocuments(selectedProject.documents || []);
-      }
-      
-      // Obtener información del responsable
-      if (selectedProject.users && selectedProject.users.length > 0) {
-        setResponsable(selectedProject.users[0]);
-      } else {
-        // Intentar obtener el responsable de otra manera si es necesario
-        setResponsable(null);
-      }
-      
-      // Si hay modelo 3D asociado
-      if (selectedProject.model3d) {
-        setModel3d(selectedProject.model3d);
-      } else {
-        setModel3d(null);
+        // Obtener detalles del proyecto
+        const projectDetails = await projectsApi.getById(projectId);
+        console.log('Detalles del proyecto obtenidos:', projectDetails);
+        
+        if (!projectDetails) {
+          setError('No se encontró información del proyecto');
+          setLoadingProject(false);
+          return;
+        }
+        
+        setProject(projectDetails);
+        
+        // Obtener tareas del proyecto
+        try {
+          const projectTasks = await tasksApi.getByProjectId(projectId);
+          console.log('Tareas obtenidas del API:', projectTasks);
+          
+          // Formatear las tareas para que coincidan con la estructura esperada
+          const formattedTasks = Array.isArray(projectTasks) ? projectTasks.map(task => ({
+            ...task,
+            // Asegurar que las fechas estén en formato Date
+            start_date: task.start_date ? new Date(task.start_date) : new Date(),
+            end_date: task.end_date ? new Date(task.end_date) : new Date(),
+            // Asegurar que el progreso sea un número
+            progress: typeof task.progress === 'number' ? task.progress : 0,
+            // Asegurar que el estado tenga un valor válido
+            status: task.status || 'pending'
+          })) : [];
+          
+          setTasks(formattedTasks);
+        } catch (taskErr) {
+          console.error('Error al obtener tareas:', taskErr);
+          setTasks([]);
+        }
+        
+        // Obtener actualizaciones del proyecto
+        try {
+          const projectUpdates = await updatesApi.getByProjectId(projectId);
+          console.log('Actualizaciones obtenidas del API:', projectUpdates);
+          
+          // Formatear las actualizaciones para que coincidan con la estructura esperada
+          const formattedUpdates = Array.isArray(projectUpdates) ? projectUpdates.map(update => ({
+            ...update,
+            // Asegurar que la fecha esté en formato Date
+            date: update.date ? new Date(update.date) : new Date(),
+            // Asegurar que completed tenga un valor booleano
+            completed: Boolean(update.completed)
+          })) : [];
+          
+          setUpdates(formattedUpdates);
+        } catch (updateErr) {
+          console.error('Error al obtener actualizaciones:', updateErr);
+          setUpdates([]);
+        }
+        
+        // Obtener documentos del proyecto
+        try {
+          const projectDocs = await documentsApi.getByProjectId(projectId);
+          console.log('Documentos obtenidos del API:', projectDocs);
+          setDocuments(Array.isArray(projectDocs) ? projectDocs : []);
+        } catch (docErr) {
+          console.error('Error al obtener documentos:', docErr);
+          setDocuments([]);
+        }
+        
+        // Obtener información del responsable
+        if (projectDetails.users && projectDetails.users.length > 0) {
+          setResponsable(projectDetails.users[0]);
+        } else {
+          setResponsable(null);
+        }
+        
+        // Si hay modelo 3D asociado
+        if (projectDetails.model3d) {
+          setModel3d(projectDetails.model3d);
+        } else {
+          setModel3d(null);
+        }
+        
+      } catch (projectErr) {
+        console.error('Error al obtener detalles del proyecto:', projectErr);
+        setError('No se pudo cargar la información del proyecto.');
+        setProject(null);
       }
       
       setLoadingProject(false);
     } catch (err) {
-      console.error('Error al cargar datos del proyecto:', err);
+      console.error('Error general al cargar datos del proyecto:', err);
       setError('No se pudo cargar la información del proyecto.');
       setLoadingProject(false);
     }
@@ -235,19 +264,42 @@ export default function DashboardPage() {
         }
         
         // Usuario real: obtener proyectos del API
-        const allProjects = await projectsApi.getAll();
-        console.log('Proyectos obtenidos del API:', allProjects);
-        
-        if (!allProjects || allProjects.length === 0) {
-          setLoading(false);
-          return;
+        try {
+          const allProjects = await projectsApi.getAll();
+          console.log('Proyectos obtenidos del API:', allProjects);
+          
+          if (!allProjects || !Array.isArray(allProjects) || allProjects.length === 0) {
+            console.log('No se encontraron proyectos o el formato de respuesta es incorrecto');
+            setLoading(false);
+            return;
+          }
+          
+          // Formatear los proyectos para asegurar que tengan la estructura correcta
+          const formattedProjects = allProjects.map(project => ({
+            ...project,
+            // Asegurar que las fechas estén en formato correcto
+            start_date: project.start_date ? new Date(project.start_date) : new Date(),
+            end_date: project.end_date ? new Date(project.end_date) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            // Asegurar que el progreso sea un número
+            progress: typeof project.progress === 'number' ? project.progress : 0,
+            // Asegurar que el estado tenga un valor por defecto
+            status: project.status || 'En progreso'
+          }));
+          
+          console.log('Proyectos formateados:', formattedProjects);
+          
+          setProjects(formattedProjects);
+          if (formattedProjects.length > 0) {
+            setSelectedProjectId(formattedProjects[0].id);
+          }
+        } catch (apiErr) {
+          console.error('Error al obtener proyectos de la API:', apiErr);
+          setError('No se pudieron cargar los proyectos desde el servidor.');
         }
         
-        setProjects(allProjects);
-        setSelectedProjectId(allProjects[0].id);
         setLoading(false);
       } catch (err) {
-        console.error('Error al cargar los proyectos:', err);
+        console.error('Error general al cargar los proyectos:', err);
         setError('No se pudieron cargar los proyectos.');
         setLoading(false);
       }
