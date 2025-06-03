@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { PlusCircle, Edit, Trash2, BarChart, Search, RefreshCw } from "lucide-react"
 import Link from "next/link"
-import { deleteProject } from "@/lib/api"
+import { deleteProject, projectsApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 
 // Definir la interfaz para el tipo de proyecto
@@ -23,49 +23,7 @@ interface Project {
   updated_at?: string;
 }
 
-// Datos de prueba para cuando no se pueda conectar al backend
-const mockProjects: Project[] = [
-  {
-    id: "p1",
-    name: "Sistema de Control Industrial para Planta Procesadora",
-    client: "Caribbean Manufacturing Inc.",
-    progress: 75,
-    end_date: "2025-06-30",
-    description: "Desarrollo de un sistema de control industrial para automatizar procesos de manufactura en la planta procesadora de alimentos, incluyendo monitoreo de temperatura, humedad y control de calidad."
-  },
-  {
-    id: "p2",
-    name: "Monitoreo Remoto de Equipos Médicos",
-    client: "Hospital General del Caribe",
-    progress: 30,
-    end_date: "2025-08-15",
-    description: "Sistema de monitoreo remoto para equipos médicos críticos con alertas en tiempo real y registro de datos para análisis posterior."
-  },
-  {
-    id: "p3",
-    name: "Plataforma IoT para Agricultura Sostenible",
-    client: "AgroCaribeña S.A.",
-    progress: 90,
-    end_date: "2025-05-10",
-    description: "Desarrollo de una plataforma IoT para monitoreo y control de cultivos en zonas rurales, incluyendo sensores de humedad del suelo, estaciones meteorológicas y sistemas de riego automatizado."
-  },
-  {
-    id: "p4",
-    name: "Sistema de Seguridad Inteligente para Hoteles",
-    client: "Cadena Hotelera Tropical",
-    progress: 45,
-    end_date: "2025-07-20",
-    description: "Sistema de seguridad con reconocimiento facial, control de acceso y monitoreo de áreas comunes para complejos hoteleros."
-  },
-  {
-    id: "p5",
-    name: "Red de Sensores para Monitoreo Ambiental",
-    client: "Departamento de Medio Ambiente",
-    progress: 60,
-    end_date: "2025-09-05",
-    description: "Implementación de una red de sensores para monitoreo de calidad del aire, nivel de ruido y otros parámetros ambientales en zonas urbanas."
-  }
-];
+// Los datos de ejemplo ahora se definen dentro del componente ProjectsAdmin
 
 export default function ProjectsAdmin() {
   const { toast } = useToast()
@@ -73,11 +31,12 @@ export default function ProjectsAdmin() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [error, setError] = useState<string | null>(null)
-  const [useMockData, setUseMockData] = useState(false)
 
   useEffect(() => {
     fetchProjects()
   }, [])
+
+  // No usaremos datos de ejemplo, mostraremos un error cuando la API falle
 
   const fetchProjects = async () => {
     try {
@@ -86,67 +45,36 @@ export default function ProjectsAdmin() {
       console.log("Obteniendo proyectos desde la API...")
       
       try {
-        // Obtener el token de autenticación
-        const token = localStorage.getItem('authToken')
-        if (!token) {
-          console.warn("No hay token de autenticación, la petición podría fallar")
-        }
-        
-        // Hacer una petición directa al endpoint de proyectos
-        const apiUrl = "https://caribbeanembeddedlabs.com/api/projects"
-        console.log("Haciendo petición a:", apiUrl)
-        
-        const headers: HeadersInit = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }
-        
-        // Añadir el token de autenticación si existe
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`
-        }
-        
-        // Configuración simplificada para evitar problemas de CORS
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: headers,
-        })
-        
-        console.log("Estado de la respuesta:", response.status, response.statusText)
-        
-        if (!response.ok) {
-          const errorText = await response.text()
-          console.error("Error texto:", errorText)
-          throw new Error(`Error ${response.status}: ${response.statusText}`)
-        }
-        
-        const data = await response.json()
+        // Usar la función projectsApi.getAll() para obtener los proyectos
+        // Esta función ya maneja la autenticación y los errores
+        console.log("Llamando a projectsApi.getAll(0, 100)...")
+        const data = await projectsApi.getAll(0, 100)
         console.log("Datos recibidos:", data)
         
         if (Array.isArray(data) && data.length > 0) {
           console.log("Datos reales recibidos:", data.length, "proyectos")
           setProjects(data)
-          setUseMockData(false)
           toast({
             title: "Proyectos cargados",
             description: `Se han cargado ${data.length} proyectos de la base de datos`,
           })
         } else {
-          console.warn("No se recibieron datos o el array está vacío, usando datos de prueba temporalmente")
-          setProjects(mockProjects)
-          setUseMockData(true)
+          console.warn("No se recibieron datos o el array está vacío")
+          setProjects([])
+          setError("No hay proyectos disponibles en la base de datos.")
           toast({
-            title: "Usando datos temporales",
-            description: "No hay proyectos en la base de datos. Mostrando datos de ejemplo temporalmente.",
+            title: "Sin proyectos",
+            description: "No hay proyectos en la base de datos.",
+            variant: "destructive"
           })
         }
       } catch (apiError: any) {
         console.error("Error al conectar con la API:", apiError)
-        setProjects(mockProjects)
-        setUseMockData(true)
+        setProjects([])
+        setError("Error al conectar con la API")
         toast({
           title: "Error de conexión",
-          description: `No se pudo conectar con la base de datos: ${apiError.message}. Usando datos temporales.`,
+          description: `No se pudo conectar con la API: ${apiError.message}`,
           variant: "destructive",
         })
       }
@@ -171,22 +99,24 @@ export default function ProjectsAdmin() {
         setIsLoading(true)
         console.log(`Eliminando proyecto con ID: ${id}`)
         
-        if (useMockData) {
-          // Si estamos usando datos de prueba, simulamos la eliminación
-          setProjects(projects.filter(project => project.id !== id))
-          toast({
-            title: "Proyecto eliminado (simulado)",
-            description: "El proyecto ha sido eliminado de los datos de prueba",
-          })
-          setIsLoading(false)
-        } else {
-          // Si estamos conectados al backend, usamos la API real
+        try {
+          // Intentar eliminar el proyecto a través de la API
           await deleteProject(id)
           toast({
             title: "Proyecto eliminado",
             description: "El proyecto ha sido eliminado correctamente",
           })
+          // Recargar la lista de proyectos
           fetchProjects()
+        } catch (deleteError) {
+          console.error("Error al eliminar el proyecto:", deleteError)
+          // Si falla la API, mostrar un mensaje de error
+          toast({
+            title: "Error al eliminar",
+            description: "No se pudo eliminar el proyecto. Por favor, inténtalo de nuevo más tarde.",
+            variant: "destructive"
+          })
+          setIsLoading(false)
         }
       } catch (error: any) {
         console.error("Error al eliminar el proyecto:", error)
@@ -225,7 +155,7 @@ export default function ProjectsAdmin() {
           </div>
         </div>
 
-        {useMockData && (
+        {false && (
           <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md text-yellow-700">
             <p className="font-medium">⚠️ Modo de demostración</p>
             <p className="text-sm">Estás viendo datos de prueba porque no se pudo conectar con el backend. Las acciones realizadas no afectarán datos reales.</p>
@@ -252,7 +182,7 @@ export default function ProjectsAdmin() {
               <div className="flex justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               </div>
-            ) : error && !useMockData ? (
+            ) : error ? (
               <div className="text-center py-8 text-red-500">
                 <p>Error al cargar los proyectos:</p>
                 <p>{error}</p>

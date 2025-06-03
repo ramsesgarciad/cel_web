@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import AdminLayout from "@/components/admin-layout"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, PlusCircle } from "lucide-react"
 import Link from "next/link"
-import { createProject } from "@/lib/api"
+import { createProject, usersApi } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 
 // Interfaz para el tipo de proyecto
@@ -23,13 +23,20 @@ interface ProjectFormData {
   description: string;
   progress?: number;
   tasks?: any[];
-  users?: any[];
+  users?: string[];
 }
 
 // Interfaz para la tarea
 interface TaskData {
   name: string;
   status: string;
+}
+
+// Interface for User data fetched from API
+interface UserOption {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export default function NewProject() {
@@ -50,6 +57,27 @@ export default function NewProject() {
     name: "",
     status: "pending",
   })
+  const [availableUsers, setAvailableUsers] = useState<UserOption[]>([])
+  const [selectedUserId, setSelectedUserId] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await usersApi.getAll()
+        if (Array.isArray(usersData)) {
+          setAvailableUsers(usersData.map(user => ({ id: String(user.id), name: user.name, email: user.email })))
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error)
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los usuarios.",
+          variant: "destructive",
+        })
+      }
+    }
+    fetchUsers()
+  }, [toast])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -57,6 +85,22 @@ export default function NewProject() {
       ...prev,
       [name]: value,
     }))
+  }
+
+  const handleUserSelectChange = (userId: string) => {
+    if (userId === "__NONE__") {
+      setSelectedUserId(undefined)
+      setFormData((prev) => ({
+        ...prev,
+        users: [],
+      }))
+    } else {
+      setSelectedUserId(userId)
+      setFormData((prev) => ({
+        ...prev,
+        users: [userId],
+      }))
+    }
   }
 
   const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,6 +253,23 @@ export default function NewProject() {
                   onChange={handleChange}
                   rows={4}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="user">Asignar Usuario (Opcional)</Label>
+                <Select value={selectedUserId || "__NONE__"} onValueChange={handleUserSelectChange}>
+                  <SelectTrigger id="user">
+                    <SelectValue placeholder="Selecciona un usuario" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__NONE__"><em>Ninguno</em></SelectItem>
+                    {availableUsers.map((user) => (
+                      <SelectItem key={user.id} value={user.id}>
+                        {user.name} ({user.email})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-4">

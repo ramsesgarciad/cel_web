@@ -1,0 +1,28 @@
+nohup: ignoring input
+
+> my-v0-project@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.2.4
+   - Local:        http://localhost:3000
+   - Network:      http://161.97.172.97:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ✓ Compiled /middleware in 300ms (101 modules)
+Middleware - Datos de usuario: {
+  name: 'Admin User',
+  email: 'admin@example.com',
+  role: 'admin',
+  id: '1',
+  projects: []
+}
+ ○ Compiling /admin/projects/[id]/update ...
+ ✓ Compiled /admin/projects/[id]/update in 7.9s (2898 modules)
+ ✓ Compiled in 933ms (1402 modules)
+ ✓ Compiled in 794ms (1402 modules)
+ GET /admin/projects/5/update 200 in 9637ms
+ ✓ Compiled in 356ms (1402 modules)
+ ✓ Compiled in 345ms (1402 modules)
+ ✓ Compiled in 439ms (1402 modules)
+ ✓ Compiled in 393ms (1402 modules)

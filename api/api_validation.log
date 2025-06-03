@@ -1,0 +1,101 @@
+2025-05-26 00:41:21,651 - INFO - El servidor API no está en ejecución. Intentando iniciar...
+2025-05-26 00:41:23,656 - INFO - Esperando a que el servidor esté listo... (1/10)
+2025-05-26 00:41:25,660 - INFO - Esperando a que el servidor esté listo... (2/10)
+2025-05-26 00:41:27,663 - INFO - Esperando a que el servidor esté listo... (3/10)
+2025-05-26 00:41:29,665 - INFO - Esperando a que el servidor esté listo... (4/10)
+2025-05-26 00:41:31,672 - INFO - Esperando a que el servidor esté listo... (5/10)
+2025-05-26 00:41:33,674 - INFO - Esperando a que el servidor esté listo... (6/10)
+2025-05-26 00:41:35,678 - INFO - Esperando a que el servidor esté listo... (7/10)
+2025-05-26 00:41:37,682 - INFO - Esperando a que el servidor esté listo... (8/10)
+2025-05-26 00:41:39,686 - INFO - Esperando a que el servidor esté listo... (9/10)
+2025-05-26 00:41:41,690 - INFO - Esperando a que el servidor esté listo... (10/10)
+2025-05-26 00:41:41,690 - ERROR - No se pudo iniciar el servidor API después de varios intentos
+2025-05-26 00:41:41,690 - ERROR - No se pudo iniciar el servidor API. Abortando validación.
+2025-05-26 00:41:41,690 - INFO - No se encontraron problemas que corregir
+2025-05-26 00:45:00,546 - INFO - El servidor API no está en ejecución. Intentando iniciar...
+2025-05-26 00:45:00,546 - INFO - Instalando dependencia faltante: python-jose
+2025-05-26 00:45:01,364 - INFO - Instalando dependencia faltante: python-dotenv
+2025-05-26 00:45:04,499 - INFO - Esperando a que el servidor esté listo... (1/15)
+2025-05-26 00:45:06,503 - INFO - Esperando a que el servidor esté listo... (2/15)
+2025-05-26 00:45:08,507 - INFO - Esperando a que el servidor esté listo... (3/15)
+2025-05-26 00:45:10,511 - INFO - Esperando a que el servidor esté listo... (4/15)
+2025-05-26 00:45:12,515 - INFO - Esperando a que el servidor esté listo... (5/15)
+2025-05-26 00:45:14,519 - INFO - Esperando a que el servidor esté listo... (6/15)
+2025-05-26 00:45:16,521 - INFO - Esperando a que el servidor esté listo... (7/15)
+2025-05-26 00:45:18,525 - INFO - Esperando a que el servidor esté listo... (8/15)
+2025-05-26 00:45:20,529 - INFO - Esperando a que el servidor esté listo... (9/15)
+2025-05-26 00:45:22,534 - INFO - Esperando a que el servidor esté listo... (10/15)
+2025-05-26 00:45:24,538 - INFO - Esperando a que el servidor esté listo... (11/15)
+2025-05-26 00:45:26,542 - INFO - Esperando a que el servidor esté listo... (12/15)
+2025-05-26 00:45:28,546 - INFO - Esperando a que el servidor esté listo... (13/15)
+2025-05-26 00:45:30,548 - INFO - Esperando a que el servidor esté listo... (14/15)
+2025-05-26 00:45:32,551 - INFO - Esperando a que el servidor esté listo... (15/15)
+2025-05-26 00:45:32,551 - INFO - Intentando iniciar el servidor directamente con main.py...
+2025-05-26 00:45:34,555 - INFO - Esperando a que el servidor esté listo (main.py)... (1/15)
+2025-05-26 00:45:36,558 - INFO - Esperando a que el servidor esté listo (main.py)... (2/15)
+2025-05-26 00:45:38,562 - INFO - Esperando a que el servidor esté listo (main.py)... (3/15)
+2025-05-26 00:45:40,569 - INFO - Esperando a que el servidor esté listo (main.py)... (4/15)
+2025-05-26 00:45:42,573 - INFO - Esperando a que el servidor esté listo (main.py)... (5/15)
+2025-05-26 00:45:44,577 - INFO - Esperando a que el servidor esté listo (main.py)... (6/15)
+2025-05-26 00:45:46,582 - INFO - Esperando a que el servidor esté listo (main.py)... (7/15)
+2025-05-26 00:45:48,586 - INFO - Esperando a que el servidor esté listo (main.py)... (8/15)
+2025-05-26 00:45:50,590 - INFO - Esperando a que el servidor esté listo (main.py)... (9/15)
+2025-05-26 00:45:52,595 - INFO - Esperando a que el servidor esté listo (main.py)... (10/15)
+2025-05-26 00:45:54,599 - INFO - Esperando a que el servidor esté listo (main.py)... (11/15)
+2025-05-26 00:45:56,603 - INFO - Esperando a que el servidor esté listo (main.py)... (12/15)
+2025-05-26 00:45:58,607 - INFO - Esperando a que el servidor esté listo (main.py)... (13/15)
+2025-05-26 00:46:00,610 - INFO - Esperando a que el servidor esté listo (main.py)... (14/15)
+2025-05-26 00:46:02,617 - INFO - Esperando a que el servidor esté listo (main.py)... (15/15)
+2025-05-26 00:46:02,617 - ERROR - No se pudo iniciar el servidor API después de varios intentos
+2025-05-26 00:46:02,617 - ERROR - No se pudo iniciar el servidor API. Abortando validación.
+2025-05-26 00:46:02,617 - INFO - No se encontraron problemas que corregir
+2025-05-26 00:46:34,516 - INFO - El servidor API no está en ejecución. Intentando iniciar...
+2025-05-26 00:46:34,517 - INFO - Instalando dependencia faltante: python-jose
+2025-05-26 00:46:35,229 - INFO - Instalando dependencia faltante: python-dotenv
+2025-05-26 00:46:38,011 - INFO - Esperando a que el servidor esté listo... (1/15)
+2025-05-26 00:46:40,016 - INFO - Esperando a que el servidor esté listo... (2/15)
+2025-05-26 00:46:42,020 - INFO - Esperando a que el servidor esté listo... (3/15)
+2025-05-26 00:46:44,024 - INFO - Esperando a que el servidor esté listo... (4/15)
+2025-05-26 00:46:46,027 - INFO - Esperando a que el servidor esté listo... (5/15)
+2025-05-26 00:46:48,032 - INFO - Esperando a que el servidor esté listo... (6/15)
+2025-05-26 00:46:50,036 - INFO - Esperando a que el servidor esté listo... (7/15)
+2025-05-26 00:46:52,041 - INFO - Esperando a que el servidor esté listo... (8/15)
+2025-05-26 00:46:54,045 - INFO - Esperando a que el servidor esté listo... (9/15)
+2025-05-26 00:46:56,049 - INFO - Esperando a que el servidor esté listo... (10/15)
+2025-05-26 00:46:58,053 - INFO - Esperando a que el servidor esté listo... (11/15)
+2025-05-26 00:47:00,057 - INFO - Esperando a que el servidor esté listo... (12/15)
+2025-05-26 00:47:02,063 - INFO - Esperando a que el servidor esté listo... (13/15)
+2025-05-26 00:47:04,066 - INFO - Esperando a que el servidor esté listo... (14/15)
+2025-05-26 00:47:06,071 - INFO - Esperando a que el servidor esté listo... (15/15)
+2025-05-26 00:47:06,071 - INFO - Intentando iniciar el servidor directamente con main.py...
+2025-05-26 00:47:08,087 - INFO - Servidor API iniciado correctamente con main.py después de 1 intentos
+2025-05-26 00:47:08,090 - ERROR - No se pudo autenticar. Abortando validación.
+2025-05-26 00:47:08,090 - INFO - Intentando corregir 1 problemas encontrados...
+2025-05-26 00:47:08,090 - INFO - Se aplicaron 0 correcciones
+2025-05-26 00:49:17,649 - INFO - El servidor API ya está en ejecución
+2025-05-26 00:49:17,654 - ERROR - No se pudo autenticar. Abortando validación.
+2025-05-26 00:49:17,654 - INFO - Intentando corregir 1 problemas encontrados...
+2025-05-26 00:49:17,654 - INFO - Se aplicaron 0 correcciones
+2025-05-26 00:49:39,959 - INFO - El servidor API no está en ejecución. Intentando iniciar...
+2025-05-26 00:49:39,959 - INFO - Instalando dependencia faltante: python-jose
+2025-05-26 00:49:40,785 - INFO - Instalando dependencia faltante: python-dotenv
+2025-05-26 00:49:43,546 - INFO - Esperando a que el servidor esté listo... (1/15)
+2025-05-26 00:49:45,549 - INFO - Esperando a que el servidor esté listo... (2/15)
+2025-05-26 00:49:47,553 - INFO - Esperando a que el servidor esté listo... (3/15)
+2025-05-26 00:49:49,558 - INFO - Esperando a que el servidor esté listo... (4/15)
+2025-05-26 00:49:51,562 - INFO - Esperando a que el servidor esté listo... (5/15)
+2025-05-26 00:49:53,566 - INFO - Esperando a que el servidor esté listo... (6/15)
+2025-05-26 00:49:55,570 - INFO - Esperando a que el servidor esté listo... (7/15)
+2025-05-26 00:49:57,575 - INFO - Esperando a que el servidor esté listo... (8/15)
+2025-05-26 00:49:59,579 - INFO - Esperando a que el servidor esté listo... (9/15)
+2025-05-26 00:50:01,584 - INFO - Esperando a que el servidor esté listo... (10/15)
+2025-05-26 00:50:03,588 - INFO - Esperando a que el servidor esté listo... (11/15)
+2025-05-26 00:50:05,593 - INFO - Esperando a que el servidor esté listo... (12/15)
+2025-05-26 00:50:07,599 - INFO - Esperando a que el servidor esté listo... (13/15)
+2025-05-26 00:50:09,604 - INFO - Esperando a que el servidor esté listo... (14/15)
+2025-05-26 00:50:11,608 - INFO - Esperando a que el servidor esté listo... (15/15)
+2025-05-26 00:50:11,608 - INFO - Intentando iniciar el servidor directamente con main.py...
+2025-05-26 00:50:13,621 - INFO - Servidor API iniciado correctamente con main.py después de 1 intentos
+2025-05-26 00:50:13,645 - ERROR - No se pudo autenticar. Abortando validación.
+2025-05-26 00:50:13,645 - INFO - Intentando corregir 1 problemas encontrados...
+2025-05-26 00:50:13,645 - INFO - Se aplicaron 0 correcciones

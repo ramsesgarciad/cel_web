@@ -54,12 +54,16 @@ export default function LoginPage() {
           description: `Bienvenido, ${response.user.name}`,
         })
         
+        // Guardar los datos del usuario en una cookie para que el middleware pueda acceder a ellos
+        document.cookie = `userData=${encodeURIComponent(JSON.stringify(response.user))}; path=/; max-age=${60*60*24*7}`; // 7 días
+        
         // Pequeño retraso para permitir que el toast se muestre
         setTimeout(() => {
           // Redirección basada en el rol del usuario
           if (response.user.role === 'admin') {
             window.location.href = '/admin';
-          } else if (response.user.role === 'user') {
+          } else if (response.user.role === 'user' || response.user.role === 'client' || response.user.email === 'client@example.com') {
+            // Redirigir a usuarios normales y clientes al dashboard
             window.location.href = '/dashboard';
           } else {
             window.location.href = '/proyectos';

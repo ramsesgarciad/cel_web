@@ -37,7 +37,7 @@ class UserList(BaseModel):
     name: str
     email: EmailStr
     role: str
-    projects: int
+    projects_count: int
 
     class Config:
         from_attributes = True

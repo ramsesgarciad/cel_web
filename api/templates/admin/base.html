@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Panel de Administración - Caribbean Embedded Labs{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 64px);
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="/admin" class="text-xl font-bold">Caribbean Embedded Labs</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>{{ user.email }}</span>
+                <a href="/auth/logout" class="hover:underline">Cerrar sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 text-white p-4">
+            <nav>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="/admin" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/projects" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-project-diagram mr-2"></i> Proyectos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/users" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-users mr-2"></i> Usuarios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/settings" class="block py-2 px-4 rounded hover:bg-gray-700">
+                            <i class="fas fa-cog mr-2"></i> Configuración
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="flex-1 p-6">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Utilidades comunes para el panel de administración -->
+    <script src="/static/js/admin-utils.js"></script>
+    <script>
+        // Script común para todas las páginas de administración
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin panel loaded');
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

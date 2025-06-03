@@ -45,7 +45,7 @@ export async function login(email: string, password: string, isAdmin = false) {
   formData.append('username', email); // El backend espera 'username' para el email
   formData.append('password', password);
   
-  const endpoint = isAdmin ? "/auth/admin/login" : "/auth/login";
+  const endpoint = isAdmin ? "/api/auth/admin/login" : "/api/auth/login";
   
   // Bypass fetchApi para este caso especial ya que necesitamos enviar form-data
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -97,6 +97,12 @@ export async function createProject(projectData: any) {
 }
 
 export async function updateProject(id: string, projectData: any) {
+  // Depuración: imprimir la petición antes de enviarla
+  console.log('[API] updateProject:', {
+    endpoint: `/projects/${id}`,
+    method: 'PUT',
+    body: projectData
+  });
   return fetchApi(`/projects/${id}`, {
     method: "PUT",
     body: JSON.stringify(projectData),

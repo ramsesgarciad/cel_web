@@ -20,6 +20,7 @@ import {
   File,
   Clipboard
 } from 'lucide-react';
+import AnimatedElement from '@/components/AnimatedElement';
 
 export default function DashboardPage() {
   // Todos los hooks deben ir al principio
@@ -119,94 +120,206 @@ export default function DashboardPage() {
       // Para proyectos reales, obtener detalles del proyecto directamente de la API
       try {
         // Obtener detalles del proyecto
+        console.log(`Obteniendo detalles del proyecto con ID: ${projectId}`);
         const projectDetails = await projectsApi.getById(projectId);
         console.log('Detalles del proyecto obtenidos:', projectDetails);
         
-        if (!projectDetails) {
-          setError('No se encontró información del proyecto');
-          setLoadingProject(false);
-          return;
+        // Verificar si hay errores en la respuesta
+        if (projectDetails && projectDetails.error) {
+          console.error(`Error al obtener detalles del proyecto: ${projectDetails.message || 'Error desconocido'}`);
+          throw new Error(projectDetails.message || 'Error al obtener datos del proyecto');
         }
         
-        setProject(projectDetails);
+        if (!projectDetails || typeof projectDetails !== 'object') {
+          throw new Error('La respuesta del servidor no contiene datos válidos del proyecto');
+        }
         
-        // Obtener tareas del proyecto
-        try {
-          const projectTasks = await tasksApi.getByProjectId(projectId);
-          console.log('Tareas obtenidas del API:', projectTasks);
+        // Formatear los datos del proyecto para asegurar que tengan el formato correcto
+        const formattedProject = {
+          ...projectDetails,
+          // Asegurar que las fechas estén en formato correcto
+          start_date: projectDetails.start_date ? new Date(projectDetails.start_date) : new Date(),
+          end_date: projectDetails.end_date ? new Date(projectDetails.end_date) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          // Asegurar que el progreso sea un número
+          progress: typeof projectDetails.progress === 'number' ? projectDetails.progress : 0,
+          // Asegurar que el estado tenga un valor por defecto
+          status: projectDetails.status || 'En progreso'
+        };
+        
+        setProject(formattedProject);
+        
+        // Verificar si el proyecto ya tiene tareas incluidas en la respuesta
+        console.log('Verificando si el proyecto tiene tareas incluidas:', projectDetails);
+        
+        if (projectDetails.tasks && Array.isArray(projectDetails.tasks) && projectDetails.tasks.length > 0) {
+          console.log('Usando tareas incluidas en la respuesta del proyecto:', projectDetails.tasks);
           
-          // Formatear las tareas para que coincidan con la estructura esperada
-          const formattedTasks = Array.isArray(projectTasks) ? projectTasks.map(task => ({
+          // Formatear las tareas incluidas en la respuesta del proyecto
+          const formattedTasks = projectDetails.tasks.map(task => ({
             ...task,
-            // Asegurar que las fechas estén en formato Date
+            id: task.id || Math.random().toString(36).substring(2, 9),
+            // Asegurar que las fechas estén en formato Date (si existen)
             start_date: task.start_date ? new Date(task.start_date) : new Date(),
             end_date: task.end_date ? new Date(task.end_date) : new Date(),
             // Asegurar que el progreso sea un número
-            progress: typeof task.progress === 'number' ? task.progress : 0,
+            progress: typeof task.progress === 'number' ? task.progress : (task.percent_done || 0),
             // Asegurar que el estado tenga un valor válido
-            status: task.status || 'pending'
-          })) : [];
+            status: task.status || 'pending',
+            // Conservar todos los campos adicionales
+            percent_done: task.percent_done || 0,
+            resource: task.resource || '',
+            is_critical_path: task.is_critical_path || false,
+            color: task.color || '#3b82f6'
+          }));
           
+          console.log('Tareas formateadas del proyecto:', formattedTasks);
           setTasks(formattedTasks);
-        } catch (taskErr) {
-          console.error('Error al obtener tareas:', taskErr);
-          setTasks([]);
+        } else {
+          // Si no hay tareas incluidas, intentar obtenerlas por separado
+          try {
+            console.log(`Obteniendo tareas para el proyecto con ID: ${projectId}`);
+            const projectTasks = await tasksApi.getByProjectId(projectId);
+            console.log('Tareas obtenidas del API:', projectTasks);
+            
+            // Verificar si hay errores en la respuesta
+            if (projectTasks && projectTasks.error) {
+              console.warn(`Error al obtener tareas: ${projectTasks.message || 'Error desconocido'}. Este proyecto no tiene tareas.`);
+              // Establecer un array vacío en lugar de datos de demostración
+              setTasks([]);
+            } else {
+              // Formatear las tareas para que coincidan con la estructura esperada
+              const formattedTasks = Array.isArray(projectTasks) ? projectTasks.map(task => ({
+                ...task,
+                id: task.id || Math.random().toString(36).substring(2, 9), // Generar ID si no existe
+                // Asegurar que las fechas estén en formato Date
+                start_date: task.start_date ? new Date(task.start_date) : new Date(),
+                end_date: task.end_date ? new Date(task.end_date) : new Date(),
+                // Asegurar que el progreso sea un número
+                progress: typeof task.progress === 'number' ? task.progress : (task.percent_done || 0),
+                // Asegurar que el estado tenga un valor válido
+                status: task.status || 'pending',
+                // Conservar todos los campos adicionales
+                percent_done: task.percent_done || 0,
+                resource: task.resource || '',
+                is_critical_path: task.is_critical_path || false,
+                color: task.color || '#3b82f6'
+              })) : [];
+              
+              console.log('Tareas formateadas obtenidas por separado:', formattedTasks);
+              // Siempre usar las tareas reales, nunca las de demostración
+              setTasks(formattedTasks);
+            }
+          } catch (taskErr) {
+            console.error('Error al obtener tareas:', taskErr);
+            // Establecer un array vacío en lugar de datos de demostración
+            setTasks([]);
+          }
         }
         
         // Obtener actualizaciones del proyecto
         try {
+          console.log(`Obteniendo actualizaciones para el proyecto con ID: ${projectId}`);
           const projectUpdates = await updatesApi.getByProjectId(projectId);
           console.log('Actualizaciones obtenidas del API:', projectUpdates);
           
-          // Formatear las actualizaciones para que coincidan con la estructura esperada
-          const formattedUpdates = Array.isArray(projectUpdates) ? projectUpdates.map(update => ({
-            ...update,
-            // Asegurar que la fecha esté en formato Date
-            date: update.date ? new Date(update.date) : new Date(),
-            // Asegurar que completed tenga un valor booleano
-            completed: Boolean(update.completed)
-          })) : [];
-          
-          setUpdates(formattedUpdates);
+          // Verificar si hay errores en la respuesta
+          if (projectUpdates && projectUpdates.error) {
+            console.warn(`Error al obtener actualizaciones: ${projectUpdates.message || 'Error desconocido'}. Usando datos de demostración.`);
+            setUpdates(demoUpdates);
+          } else {
+            // Formatear las actualizaciones para que coincidan con la estructura esperada
+            const formattedUpdates = Array.isArray(projectUpdates) ? projectUpdates.map(update => ({
+              ...update,
+              id: update.id || Math.random().toString(36).substring(2, 9), // Generar ID si no existe
+              // Asegurar que la fecha esté en formato Date
+              date: update.date ? new Date(update.date) : new Date(),
+              // Asegurar que el contenido tenga un valor por defecto
+              content: update.content || 'Actualización del proyecto',
+              // Asegurar que completed tenga un valor booleano
+              completed: Boolean(update.completed)
+            })) : [];
+            
+            setUpdates(formattedUpdates.length > 0 ? formattedUpdates : demoUpdates);
+          }
         } catch (updateErr) {
           console.error('Error al obtener actualizaciones:', updateErr);
-          setUpdates([]);
+          // Usar actualizaciones de demostración como respaldo
+          setUpdates(demoUpdates);
         }
         
         // Obtener documentos del proyecto
         try {
+          console.log(`Obteniendo documentos para el proyecto con ID: ${projectId}`);
           const projectDocs = await documentsApi.getByProjectId(projectId);
           console.log('Documentos obtenidos del API:', projectDocs);
-          setDocuments(Array.isArray(projectDocs) ? projectDocs : []);
+          
+          // Verificar si hay errores en la respuesta
+          if (projectDocs && projectDocs.error) {
+            console.warn(`Error al obtener documentos: ${projectDocs.message || 'Error desconocido'}. Usando datos de demostración.`);
+            setDocuments(demoDocuments);
+          } else {
+            // Formatear los documentos para asegurar que tengan la estructura correcta
+            const formattedDocs = Array.isArray(projectDocs) ? projectDocs.map(doc => ({
+              ...doc,
+              id: doc.id || Math.random().toString(36).substring(2, 9), // Generar ID si no existe
+              name: doc.name || 'Documento sin nombre',
+              type: doc.type || 'pdf',
+              size: doc.size || '1MB',
+              url: doc.url || '#'
+            })) : [];
+            
+            setDocuments(formattedDocs.length > 0 ? formattedDocs : demoDocuments);
+          }
         } catch (docErr) {
           console.error('Error al obtener documentos:', docErr);
-          setDocuments([]);
+          // Usar documentos de demostración como respaldo
+          setDocuments(demoDocuments);
         }
         
         // Obtener información del responsable
         if (projectDetails.users && projectDetails.users.length > 0) {
           setResponsable(projectDetails.users[0]);
         } else {
-          setResponsable(null);
+          // Usar responsable de demostración como respaldo
+          setResponsable(demoResponsable);
         }
         
         // Si hay modelo 3D asociado
         if (projectDetails.model3d) {
           setModel3d(projectDetails.model3d);
         } else {
-          setModel3d(null);
+          // Usar modelo 3D de demostración como respaldo
+          setModel3d(demoModel3d);
         }
         
       } catch (projectErr) {
         console.error('Error al obtener detalles del proyecto:', projectErr);
-        setError('No se pudo cargar la información del proyecto.');
-        setProject(null);
+        setError('No se pudo cargar la información del proyecto. Usando datos de demostración como respaldo.');
+        
+        // Usar proyecto de demostración como respaldo
+        const fallbackProject = demoProjects.find(p => p.id.toString() === projectId.toString()) || demoProject;
+        setProject(fallbackProject);
+        setTasks(fallbackProject.tasks || demoTasks);
+        setUpdates(fallbackProject.updates || demoUpdates);
+        setDocuments(fallbackProject.documents || demoDocuments);
+        setModel3d(fallbackProject.model3d || demoModel3d);
+        setResponsable(fallbackProject.responsable || demoResponsable);
       }
       
       setLoadingProject(false);
     } catch (err) {
       console.error('Error general al cargar datos del proyecto:', err);
-      setError('No se pudo cargar la información del proyecto.');
+      setError('No se pudo cargar la información del proyecto. Usando datos de demostración como respaldo.');
+      
+      // Usar proyecto de demostración como respaldo
+      const fallbackProject = demoProjects.find(p => p.id.toString() === projectId.toString()) || demoProject;
+      setProject(fallbackProject);
+      setTasks(fallbackProject.tasks || demoTasks);
+      setUpdates(fallbackProject.updates || demoUpdates);
+      setDocuments(fallbackProject.documents || demoDocuments);
+      setModel3d(fallbackProject.model3d || demoModel3d);
+      setResponsable(fallbackProject.responsable || demoResponsable);
+      
       setLoadingProject(false);
     }
   };
@@ -265,18 +378,108 @@ export default function DashboardPage() {
         
         // Usuario real: obtener proyectos del API
         try {
+          console.log('Obteniendo todos los proyectos desde la API...');
           const allProjects = await projectsApi.getAll();
           console.log('Proyectos obtenidos del API:', allProjects);
           
-          if (!allProjects || !Array.isArray(allProjects) || allProjects.length === 0) {
-            console.log('No se encontraron proyectos o el formato de respuesta es incorrecto');
+          // Verificar si hay errores en la respuesta
+          if (allProjects && allProjects.error) {
+            console.error(`Error al obtener proyectos: ${allProjects.message || 'Error desconocido'}`);
+            throw new Error(allProjects.message || 'Error al obtener proyectos');
+          }
+          
+          if (!allProjects) {
+            throw new Error('La respuesta del servidor no contiene datos de proyectos');
+          }
+          
+          // Verificar si la respuesta es un array o necesita ser parseada
+          let projectsData = allProjects;
+          if (typeof allProjects === 'string') {
+            try {
+              projectsData = JSON.parse(allProjects);
+              console.log('Datos de proyectos parseados:', projectsData);
+            } catch (parseErr) {
+              console.error('Error al parsear la respuesta JSON:', parseErr);
+              throw new Error('La respuesta del servidor no es un JSON válido');
+            }
+          }
+          
+          // Asegurar que los datos sean un array
+          if (!Array.isArray(projectsData)) {
+            console.warn('La respuesta no es un array, usando datos de demostración como respaldo');
+            setProjects(demoProjects);
+            setSelectedProjectId(demoProjects[0].id);
+            setLoading(false);
+            return;
+          }
+          
+          if (projectsData.length === 0) {
+            console.log('No se encontraron proyectos, usando datos de demostración como respaldo');
+            setProjects(demoProjects);
+            setSelectedProjectId(demoProjects[0].id);
+            setLoading(false);
+            return;
+          }
+          
+          // Convertir el ID del usuario a string para comparación consistente
+          const userId = user.id ? String(user.id) : null;
+          const userEmail = user.email;
+          
+          console.log('Datos del usuario actual:', { id: userId, email: userEmail, role: user.role });
+          
+          // Filtrar proyectos para mostrar solo los asignados al usuario actual
+          const userProjects = projectsData.filter(project => {
+            // Verificar si el proyecto tiene usuarios asignados
+            if (!project.users || !Array.isArray(project.users)) {
+              // Si no tiene usuarios asignados y el usuario es cliente, no mostrar
+              return user.role !== 'client';
+            }
+            
+            // Para usuarios con rol 'client', mostrar solo sus proyectos asignados
+            if (user.role === 'client') {
+              // Verificar si el usuario actual (cliente) está entre los usuarios asignados al proyecto
+              const isAssigned = project.users.some(projectUser => {
+                // Convertir IDs a strings para comparación consistente
+                const projectUserId = projectUser.id ? String(projectUser.id) : null;
+                const projectUserEmail = projectUser.email;
+                
+                // Comparar por ID o email
+                return (userId && projectUserId && userId === projectUserId) || 
+                       (userEmail && projectUserEmail && userEmail === projectUserEmail);
+              });
+              
+              console.log(`Proyecto ${project.id} (${project.name}) asignado al usuario: ${isAssigned}`);
+              return isAssigned;
+            }
+            
+            // Para usuarios con rol 'admin' o 'user', mostrar todos los proyectos
+            return true;
+          });
+          
+          console.log(`Proyectos filtrados para el usuario ${user.name} (${user.role}):`, userProjects);
+          
+          console.log('Proyectos filtrados para el usuario actual:', userProjects);
+          
+          // Si no hay proyectos asignados al usuario, usar datos de demostración
+          if (userProjects.length === 0) {
+            console.log('No se encontraron proyectos asignados al usuario, usando datos de demostración');
+            setProjects(demoProjects);
+            setSelectedProjectId(demoProjects[0].id);
             setLoading(false);
             return;
           }
           
           // Formatear los proyectos para asegurar que tengan la estructura correcta
-          const formattedProjects = allProjects.map(project => ({
+          const formattedProjects = userProjects.map(project => ({
             ...project,
+            // Asegurar que el ID sea un valor válido
+            id: project.id || Math.random().toString(36).substring(2, 9),
+            // Asegurar que el nombre tenga un valor por defecto
+            name: project.name || 'Proyecto sin nombre',
+            // Asegurar que la descripción tenga un valor por defecto
+            description: project.description || 'Sin descripción',
+            // Asegurar que el cliente tenga un valor por defecto
+            client: project.client || 'Cliente no especificado',
             // Asegurar que las fechas estén en formato correcto
             start_date: project.start_date ? new Date(project.start_date) : new Date(),
             end_date: project.end_date ? new Date(project.end_date) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
@@ -294,13 +497,21 @@ export default function DashboardPage() {
           }
         } catch (apiErr) {
           console.error('Error al obtener proyectos de la API:', apiErr);
-          setError('No se pudieron cargar los proyectos desde el servidor.');
+          setError('No se pudieron cargar los proyectos desde el servidor. Usando datos de demostración como respaldo.');
+          
+          // Usar proyectos de demostración como respaldo
+          setProjects(demoProjects);
+          setSelectedProjectId(demoProjects[0].id);
         }
         
         setLoading(false);
       } catch (err) {
         console.error('Error general al cargar los proyectos:', err);
-        setError('No se pudieron cargar los proyectos.');
+        setError('No se pudieron cargar los proyectos. Usando datos de demostración como respaldo.');
+        
+        // Usar proyectos de demostración como respaldo
+        setProjects(demoProjects);
+        setSelectedProjectId(demoProjects[0].id);
         setLoading(false);
       }
     }
@@ -425,366 +636,361 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="w-full">
-        {/* Encabezado */}
-        <header className="bg-white shadow py-4 px-8 flex justify-between items-center sticky top-0 z-10">
-          <div className="flex items-center space-x-4">
-            <Image
-              src="/h_caribean_embeded_labs.png"
-              alt="Caribbean Embedded Labs Logo"
-              width={160}
-              height={40}
-              className="object-contain"
-            />
-            <h1 className="text-xl font-semibold text-gray-800">Panel de Cliente</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button 
-              onClick={() => router.push('/profile')}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                  {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
-                </div>
-                <span>{user.name || user.email}</span>
-              </div>
-            </button>
-            <button 
-              onClick={logout}
-              className="text-sm text-gray-600 hover:text-gray-800"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
-        </header>
-
-        {/* Contenido principal con sidebar */}
-        <div className="flex">
-          {/* Sidebar con lista de proyectos */}
-          <aside className={`bg-white shadow transition-all duration-300 ${sidebarOpen ? 'w-72' : 'w-14'} min-h-[calc(100vh-4rem)] flex flex-col`}>
-            <div className="py-4 px-4 border-b border-gray-100 flex justify-between items-center">
-              <h2 className={`font-semibold text-gray-800 ${sidebarOpen ? 'block' : 'hidden'}`}>Mis Proyectos</h2>
+    <AnimatedElement delay={0.1}>
+      <div className="bg-gray-50 min-h-screen">
+        <div className="w-full">
+          {/* Encabezado */}
+          <header className="bg-white shadow py-4 px-8 flex justify-between items-center sticky top-0 z-10">
+            <div className="flex items-center space-x-4">
+              <Image
+                src="/h_caribean_embeded_labs.png"
+                alt="Caribbean Embedded Labs Logo"
+                width={160}
+                height={40}
+                className="object-contain"
+              />
+              <h1 className="text-xl font-semibold text-gray-800">Panel de Cliente</h1>
+            </div>
+            <div className="flex items-center space-x-4">
               <button 
-                onClick={toggleSidebar}
-                className="text-gray-500 hover:text-gray-700 p-1"
+                onClick={() => router.push('/profile')}
+                className="text-gray-600 hover:text-gray-800"
               >
-                {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                    {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                  </div>
+                  <span>{user.name || user.email}</span>
+                </div>
+              </button>
+              <button 
+                onClick={logout}
+                className="text-sm text-gray-600 hover:text-gray-800"
+              >
+                Cerrar Sesión
               </button>
             </div>
-            
-            <div className="overflow-y-auto flex-1">
-              <ul className="py-2">
-                {projects.map((proj) => (
-                  <li key={proj.id} className="px-2 py-1">
-                    <button
-                      onClick={() => setSelectedProjectId(proj.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                        selectedProjectId === proj.id
-                          ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
-                          : 'hover:bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${
-                          proj.progress >= 100 
-                            ? 'bg-green-500' 
-                            : proj.progress > 0 
-                              ? 'bg-yellow-500' 
-                              : 'bg-blue-500'
-                        }`}></div>
-                        {sidebarOpen ? (
-                          <div className="w-full">
-                            <p className="font-medium truncate" style={{ maxWidth: '230px' }}>{proj.name}</p>
-                            <p className="text-xs text-gray-500 truncate" style={{ maxWidth: '230px' }}>
-                              {proj.progress}% completado
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-200">
-                            {proj.name.charAt(0)}
-                          </div>
-                        )}
-                      </div>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
+          </header>
 
-          {/* Contenido principal */}
-          <main className="flex-1 p-4 md:p-6 overflow-auto">
-            {loading ? (
-              <div className="text-center py-12 text-gray-500">Cargando información...</div>
-            ) : error ? (
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4 text-red-700">{error}</div>
-            ) : !project ? (
-              <div className="text-center py-12 text-gray-500">No se encontró ningún proyecto asignado.</div>
-            ) : (
-              <>
-                {/* Mostrar indicador cuando se está cargando un proyecto específico */}
-                {loadingProject && (
-                  <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                      <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
-                      <div className="mt-2 text-sm text-gray-600">Cargando proyecto...</div>
-                    </div>
-                  </div>
-                )}
-                
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-                  {/* Progreso - reducido a 3 columnas */}
-                  <section className="col-span-3 bg-white rounded shadow p-6 flex flex-col items-center">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700 self-start">Progreso del Proyecto</h2>
-                    <div className="w-full max-w-[180px] h-[180px] flex justify-center">
-                      <CustomProgressCircle percentage={project.progress} size={180} strokeWidth={15} className="mx-auto" />
-                    </div>
-                    <div className="mt-6 w-full space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Inicio:</span>
-                        <span className="font-medium">{new Date(project.start_date).toLocaleDateString('es-ES')}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Fin estimado:</span>
-                        <span className="font-medium">{new Date(project.end_date).toLocaleDateString('es-ES')}</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Estado:</span>
-                        <span className="font-medium text-blue-600">{project.status}</span>
-                      </div>
-                    </div>
-                  </section>
+          {/* Contenido principal con sidebar */}
+          <div className="flex">
+            {/* Sidebar con lista de proyectos */}
+            <aside className={`bg-white shadow transition-all duration-300 ${sidebarOpen ? 'w-72' : 'w-14'} min-h-[calc(100vh-4rem)] flex flex-col`}>
+              <div className="py-4 px-4 border-b border-gray-100 flex justify-between items-center">
+                <h2 className={`font-semibold text-gray-800 ${sidebarOpen ? 'block' : 'hidden'}`}>Mis Proyectos</h2>
+                <button 
+                  onClick={toggleSidebar}
+                  className="text-gray-500 hover:text-gray-700 p-1"
+                >
+                  {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+                </button>
+              </div>
+              
+              <div className="overflow-y-auto flex-1">
+                <ul className="py-2">
+                  {projects.map((proj) => (
+                    <li key={proj.id} className="px-2 py-1">
+                      <button
+                        onClick={() => setSelectedProjectId(proj.id)}
+                        className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                          selectedProjectId === proj.id
+                            ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500'
+                            : 'hover:bg-gray-100 text-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <div className={`w-2 h-2 rounded-full mr-2 ${
+                            proj.progress >= 100 
+                              ? 'bg-green-500' 
+                              : proj.progress > 0 
+                                ? 'bg-yellow-500' 
+                                : 'bg-blue-500'
+                          }`}></div>
+                          {sidebarOpen ? (
+                            <div className="w-full">
+                              <p className="font-medium truncate" style={{ maxWidth: '230px' }}>{proj.name}</p>
+                              <p className="text-xs text-gray-500 truncate" style={{ maxWidth: '230px' }}>
+                                {proj.progress}% completado
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-200">
+                              {proj.name.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
 
-                  {/* Actualizaciones - 4 columnas */}
-                  <section className="col-span-4 bg-white rounded shadow p-6 overflow-y-auto" style={{maxHeight: '400px'}}>
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Actualizaciones Recientes</h2>
-                    {updates && updates.length > 0 ? (
-                      <div className="space-y-3">
-                        {updates.map((update) => (
-                          <div key={update.id} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
-                            <div className="flex justify-between items-start">
-                              <div className="flex items-start">
-                                {update.completed ? (
-                                  <Check size={16} className="text-green-500 mt-1 mr-2 flex-shrink-0" />
-                                ) : (
-                                  <AlertCircle size={16} className="text-blue-500 mt-1 mr-2 flex-shrink-0" />
-                                )}
-                                <p className="text-sm text-gray-700">{update.content}</p>
-                              </div>
-                              <div className="flex items-center text-xs text-gray-500 ml-2 flex-shrink-0">
-                                <Clock size={12} className="mr-1" />
-                                <span>{new Date(update.date).toLocaleDateString('es-ES')}</span>
+            {/* Contenido principal */}
+            <main className="flex-1 p-4 md:p-6 overflow-auto">
+              {loading ? (
+                <div className="text-center py-12 text-gray-500">Cargando información...</div>
+              ) : error ? (
+                <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-4 text-red-700">{error}</div>
+              ) : !project ? (
+                <div className="text-center py-12 text-gray-500">No se encontró ningún proyecto asignado.</div>
+              ) : (
+                <>
+                  {/* Mostrar indicador cuando se está cargando un proyecto específico */}
+                  {loadingProject && (
+                    <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
+                      <div className="bg-white p-4 rounded-lg shadow-lg">
+                        <div className="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
+                        <div className="mt-2 text-sm text-gray-600">Cargando proyecto...</div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+                    {/* Progreso - reducido a 3 columnas */}
+                    <section className="col-span-3 bg-white rounded shadow p-6 flex flex-col items-center">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-700 self-start">Progreso del Proyecto</h2>
+                      <div className="w-full max-w-[180px] h-[180px] flex justify-center">
+                        <CustomProgressCircle percentage={project.progress} size={180} strokeWidth={15} className="mx-auto" />
+                      </div>
+                      <div className="mt-6 w-full space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Inicio:</span>
+                          <span className="font-medium">{new Date(project.start_date).toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Fin estimado:</span>
+                          <span className="font-medium">{new Date(project.end_date).toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Estado:</span>
+                          <span className="font-medium text-blue-600">{project.status}</span>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Actualizaciones - 4 columnas */}
+                    <section className="col-span-4 bg-white rounded shadow p-6 overflow-y-auto" style={{maxHeight: '400px'}}>
+                      <h2 className="text-xl font-semibold mb-4 text-gray-700">Actualizaciones Recientes</h2>
+                      {updates && updates.length > 0 ? (
+                        <div className="space-y-3">
+                          {updates.map((update) => (
+                            <div key={update.id} className="p-3 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                              <div className="flex justify-between items-start">
+                                <div className="flex items-start">
+                                  {update.completed ? (
+                                    <Check size={16} className="text-green-500 mt-1 mr-2 flex-shrink-0" />
+                                  ) : (
+                                    <AlertCircle size={16} className="text-blue-500 mt-1 mr-2 flex-shrink-0" />
+                                  )}
+                                  <p className="text-sm text-gray-700">{update.content}</p>
+                                </div>
+                                <div className="flex items-center text-xs text-gray-500 ml-2 flex-shrink-0">
+                                  <Clock size={12} className="mr-1" />
+                                  <span>{new Date(update.date).toLocaleDateString('es-ES')}</span>
+                                </div>
                               </div>
                             </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-gray-500">No hay actualizaciones recientes.</p>
+                      )}
+                    </section>
+
+                    {/* Información del proyecto - 5 columnas */}
+                    <section className="col-span-5 bg-white rounded shadow p-6">
+                      <h2 className="text-xl font-semibold mb-4 text-gray-700">{project.name}</h2>
+                      <p className="text-gray-600 mb-6">{project.description}</p>
+                      
+                      {responsable && (
+                        <div className="mb-6">
+                          <h3 className="text-md font-medium text-gray-700 mb-2">Responsable del proyecto:</h3>
+                          <div className="flex items-center space-x-2 text-gray-600">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                              {responsable.name ? responsable.name.charAt(0).toUpperCase() : 'R'}
+                            </div>
+                            <div>
+                              <p className="font-medium">{responsable.name}</p>
+                              <p className="text-sm text-gray-500">{responsable.email}</p>
+                            </div>
                           </div>
+                        </div>
+                      )}
+                      
+                      {/* Modelo 3D si está disponible */}
+                      {model3d && (
+                        <div className="mb-6">
+                          <h3 className="text-md font-medium text-gray-700 mb-2">Vista previa 3D:</h3>
+                          <iframe
+                            title={model3d.name}
+                            width="100%"
+                            height="250"
+                            src={model3d.url}
+                            allowFullScreen
+                            className="border-0 rounded"
+                          ></iframe>
+                        </div>
+                      )}
+                    </section>
+                  </div>
+
+                  {/* Tareas */}
+                  <section className="mt-6 bg-white rounded shadow p-6">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Tareas del Proyecto</h2>
+                    {tasks && tasks.length > 0 ? (
+                      <div>
+                        {/* Gantt Chart mejorado */}
+                        <div className="mb-6 overflow-x-auto">
+                          <div className="min-w-full" style={{ minWidth: '100%' }}>
+                            <div className="flex mb-2">
+                              <div className="w-1/4 font-medium text-gray-700 pl-2">Tarea</div>
+                              <div className="w-3/4 relative">
+                                <div className="h-6 flex">
+                                  {[...Array(totalDays > 60 ? 60 : totalDays).keys()].map((i) => {
+                                    const date = new Date(minDate);
+                                    date.setDate(date.getDate() + i);
+                                    const isMonthStart = date.getDate() === 1 || i === 0;
+                                    return (
+                                      <div key={i} className="flex-1 text-xs text-center text-gray-500 border-r border-gray-200 relative">
+                                        {isMonthStart && (
+                                          <div className="absolute -top-4 left-0 right-0 text-xs font-medium text-blue-600">
+                                            {date.toLocaleDateString('es-ES', { month: 'short' })}
+                                          </div>
+                                        )}
+                                        {i % 2 === 0 && (
+                                          <span>{date.getDate()}</span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+
+                            {tasks.map((task) => (
+                              <div key={task.id} className="flex py-2 border-t border-gray-100 hover:bg-gray-50">
+                                <div className="w-1/4 pr-4">
+                                  <div className="flex items-start">
+                                    <div className={`mt-1 w-3 h-3 rounded-full flex-shrink-0 ${
+                                      task.status === 'completed' 
+                                        ? 'bg-green-500' 
+                                        : task.status === 'in_progress' 
+                                          ? 'bg-yellow-500' 
+                                          : 'bg-blue-500'
+                                    }`}></div>
+                                    <div className="ml-2 truncate">
+                                      <p className="font-medium text-gray-700 text-sm truncate">{task.name}</p>
+                                      <div className="flex items-center gap-2">
+                                        <p className={`text-xs mt-1 px-2 py-0.5 rounded-full inline-block ${getStatusColor(task.status)}`}>
+                                          {getStatusText(task.status)}
+                                        </p>
+                                        <span className="text-xs text-gray-500">{task.progress}%</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="w-3/4 relative">
+                                  <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full h-1 bg-gray-100"></div>
+                                  </div>
+                                  <div 
+                                    className={`absolute h-7 rounded ${
+                                      task.status === 'completed' 
+                                        ? 'bg-green-200 border border-green-400' 
+                                        : task.status === 'in_progress' 
+                                          ? 'bg-yellow-200 border border-yellow-400' 
+                                          : 'bg-blue-200 border border-blue-400'
+                                    }`}
+                                    style={calculateTaskPosition(task)}
+                                  >
+                                    <div className="h-full flex items-center justify-center px-2 overflow-hidden">
+                                      <span className="text-xs whitespace-nowrap font-medium">{task.progress}%</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Lista de tareas mejorada */}
+                        <div>
+                          <h3 className="font-medium text-gray-700 mb-4">Detalle de Tareas</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            {tasks.map((task) => (
+                              <AnimatedElement key={task.id} delay={0.1} direction="scale">
+                                <div className="p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <h4 className="font-medium text-sm">{task.name}</h4>
+                                    <Badge 
+                                      variant={task.status === 'completed' ? 'success' : task.status === 'in_progress' ? 'warning' : 'info'}
+                                      className="text-xs"
+                                    >
+                                      {getStatusText(task.status)}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-lg font-bold">{task.progress}%</p>
+                                </div>
+                              </AnimatedElement>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">No hay tareas disponibles para este proyecto.</p>
+                    )}
+                  </section>
+
+
+
+                  {/* Documentos */}
+                  <section className="mt-6 bg-white rounded shadow p-6">
+                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Documentos</h2>
+                    {documents && documents.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {documents.map((doc) => (
+                          <AnimatedElement key={doc.id} delay={0.1} direction="scale">
+                            <div className="p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                              <div className="flex items-start justify-between">
+                                <div className="flex items-start">
+                                  {doc.type === 'pdf' ? (
+                                    <FileText className="text-red-500 mr-3 flex-shrink-0" size={24} />
+                                  ) : doc.type === 'image' ? (
+                                    <FileType className="text-purple-500 mr-3 flex-shrink-0" size={24} />
+                                  ) : doc.type === '3d' ? (
+                                    <File className="text-blue-500 mr-3 flex-shrink-0" size={24} />
+                                  ) : (
+                                    <Clipboard className="text-gray-500 mr-3 flex-shrink-0" size={24} />
+                                  )}
+                                  <div>
+                                    <p className="font-medium text-gray-800 truncate">{doc.name}</p>
+                                    <p className="text-xs text-gray-500 mt-1">{doc.size}</p>
+                                  </div>
+                                </div>
+                                <a
+                                  href={doc.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-3 py-1 text-sm text-blue-600 border border-blue-200 rounded hover:bg-blue-50 ml-2 flex-shrink-0"
+                                >
+                                  Ver
+                                </a>
+                              </div>
+                            </div>
+                          </AnimatedElement>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-500">No hay actualizaciones recientes.</p>
+                      <p className="text-gray-500">No hay documentos disponibles para este proyecto.</p>
                     )}
                   </section>
-
-                  {/* Información del proyecto - 5 columnas */}
-                  <section className="col-span-5 bg-white rounded shadow p-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700">{project.name}</h2>
-                    <p className="text-gray-600 mb-6">{project.description}</p>
-                    
-                    {responsable && (
-                      <div className="mb-6">
-                        <h3 className="text-md font-medium text-gray-700 mb-2">Responsable del proyecto:</h3>
-                        <div className="flex items-center space-x-2 text-gray-600">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                            {responsable.name ? responsable.name.charAt(0).toUpperCase() : 'R'}
-                          </div>
-                          <div>
-                            <p className="font-medium">{responsable.name}</p>
-                            <p className="text-sm text-gray-500">{responsable.email}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Modelo 3D si está disponible */}
-                    {model3d && (
-                      <div className="mb-6">
-                        <h3 className="text-md font-medium text-gray-700 mb-2">Vista previa 3D:</h3>
-                        <iframe
-                          title={model3d.name}
-                          width="100%"
-                          height="250"
-                          src={model3d.url}
-                          allowFullScreen
-                          className="border-0 rounded"
-                        ></iframe>
-                      </div>
-                    )}
-                  </section>
-                </div>
-
-                {/* Tareas */}
-                <section className="mt-6 bg-white rounded shadow p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">Tareas del Proyecto</h2>
-                  {tasks && tasks.length > 0 ? (
-                    <div>
-                      {/* Gantt Chart mejorado */}
-                      <div className="mb-6 overflow-x-auto">
-                        <div className="min-w-full" style={{ minWidth: '100%' }}>
-                          <div className="flex mb-2">
-                            <div className="w-1/4 font-medium text-gray-700 pl-2">Tarea</div>
-                            <div className="w-3/4 relative">
-                              <div className="h-6 flex">
-                                {[...Array(totalDays > 60 ? 60 : totalDays).keys()].map((i) => {
-                                  const date = new Date(minDate);
-                                  date.setDate(date.getDate() + i);
-                                  const isMonthStart = date.getDate() === 1 || i === 0;
-                                  return (
-                                    <div key={i} className="flex-1 text-xs text-center text-gray-500 border-r border-gray-200 relative">
-                                      {isMonthStart && (
-                                        <div className="absolute -top-4 left-0 right-0 text-xs font-medium text-blue-600">
-                                          {date.toLocaleDateString('es-ES', { month: 'short' })}
-                                        </div>
-                                      )}
-                                      {i % 2 === 0 && (
-                                        <span>{date.getDate()}</span>
-                                      )}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          </div>
-
-                          {tasks.map((task) => (
-                            <div key={task.id} className="flex py-2 border-t border-gray-100 hover:bg-gray-50">
-                              <div className="w-1/4 pr-4">
-                                <div className="flex items-start">
-                                  <div className={`mt-1 w-3 h-3 rounded-full flex-shrink-0 ${
-                                    task.status === 'completed' 
-                                      ? 'bg-green-500' 
-                                      : task.status === 'in_progress' 
-                                        ? 'bg-yellow-500' 
-                                        : 'bg-blue-500'
-                                  }`}></div>
-                                  <div className="ml-2 truncate">
-                                    <p className="font-medium text-gray-700 text-sm truncate">{task.name}</p>
-                                    <div className="flex items-center gap-2">
-                                      <p className={`text-xs mt-1 px-2 py-0.5 rounded-full inline-block ${getStatusColor(task.status)}`}>
-                                        {getStatusText(task.status)}
-                                      </p>
-                                      <span className="text-xs text-gray-500">{task.progress}%</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="w-3/4 relative">
-                                <div className="absolute inset-0 flex items-center">
-                                  <div className="w-full h-1 bg-gray-100"></div>
-                                </div>
-                                <div 
-                                  className={`absolute h-7 rounded ${
-                                    task.status === 'completed' 
-                                      ? 'bg-green-200 border border-green-400' 
-                                      : task.status === 'in_progress' 
-                                        ? 'bg-yellow-200 border border-yellow-400' 
-                                        : 'bg-blue-200 border border-blue-400'
-                                  }`}
-                                  style={calculateTaskPosition(task)}
-                                >
-                                  <div className="h-full flex items-center justify-center px-2 overflow-hidden">
-                                    <span className="text-xs whitespace-nowrap font-medium">{task.progress}%</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Lista de tareas mejorada */}
-                      <div>
-                        <h3 className="font-medium text-gray-700 mb-4">Detalle de Tareas</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                          {tasks.map((task) => (
-                            <div key={task.id} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                              <div className="flex justify-between items-start">
-                                <div className="w-3/4">
-                                  <p className="font-medium text-gray-800 mb-2">{task.name}</p>
-                                  <div className="flex flex-wrap items-center gap-3 mt-1">
-                                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(task.status)}`}>
-                                      {getStatusText(task.status)}
-                                    </span>
-                                    <div className="flex items-center text-xs text-gray-500">
-                                      <Calendar size={14} className="mr-1" />
-                                      <span>{new Date(task.start_date).toLocaleDateString('es-ES')} - {new Date(task.end_date).toLocaleDateString('es-ES')}</span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="text-right">
-                                  <div className="flex items-center justify-center">
-                                    <span className="text-lg font-bold" style={{ color: task.progress >= 100 ? '#48bb78' : task.progress > 60 ? '#4299e1' : '#ed8936' }}>
-                                      {task.progress}%
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-gray-500">No hay tareas disponibles para este proyecto.</p>
-                  )}
-                </section>
-
-
-
-                {/* Documentos */}
-                <section className="mt-6 bg-white rounded shadow p-6">
-                  <h2 className="text-xl font-semibold mb-4 text-gray-700">Documentos</h2>
-                  {documents && documents.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                      {documents.map((doc) => (
-                        <div key={doc.id} className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-start">
-                              {doc.type === 'pdf' ? (
-                                <FileText className="text-red-500 mr-3 flex-shrink-0" size={24} />
-                              ) : doc.type === 'image' ? (
-                                <FileType className="text-purple-500 mr-3 flex-shrink-0" size={24} />
-                              ) : doc.type === '3d' ? (
-                                <File className="text-blue-500 mr-3 flex-shrink-0" size={24} />
-                              ) : (
-                                <Clipboard className="text-gray-500 mr-3 flex-shrink-0" size={24} />
-                              )}
-                              <div>
-                                <p className="font-medium text-gray-800 truncate">{doc.name}</p>
-                                <p className="text-xs text-gray-500 mt-1">{doc.size}</p>
-                              </div>
-                            </div>
-                            <a
-                              href={doc.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-3 py-1 text-sm text-blue-600 border border-blue-200 rounded hover:bg-blue-50 ml-2 flex-shrink-0"
-                            >
-                              Ver
-                            </a>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500">No hay documentos disponibles para este proyecto.</p>
-                  )}
-                </section>
-              </>
-            )}
-          </main>
+                </>
+              )}
+            </main>
+          </div>
         </div>
       </div>
-    </div>
+    </AnimatedElement>
   );
 }

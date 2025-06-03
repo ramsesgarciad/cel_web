@@ -24,3 +24,7 @@ class User(Base):
 
     # Relationships
     projects = relationship("Project", secondary=user_project, back_populates="users")
+
+    @property
+    def projects_count(self):
+        return len(self.projects)

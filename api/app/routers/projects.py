@@ -16,7 +16,7 @@ router = APIRouter()
 
 # Función auxiliar para agregar encabezados CORS a las respuestas
 def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "http://127.0.0.1:3000"
+    response.headers["Access-Control-Allow-Origin"] = "https://caribbeanembeddedlabs.com"
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     response.headers["Access-Control-Allow-Credentials"] = "true"
@@ -48,8 +48,23 @@ async def read_projects(
                 elif project.progress >= 100:
                     status = "Completado"
                 
+                # Obtener los usuarios asignados a este proyecto
+                project_users = []
+                try:
+                    if project.users:
+                        for user in project.users:
+                            project_users.append({
+                                "id": str(user.id),  # Convertir ID a string para consistencia
+                                "name": user.name,
+                                "email": user.email,
+                                "role": user.role
+                            })
+                        print(f"Usuarios encontrados para el proyecto {project.id}: {len(project_users)}")
+                except Exception as e:
+                    print(f"Error al obtener usuarios del proyecto {project.id}: {e}")
+                
                 project_dict = {
-                    "id": project.id,
+                    "id": str(project.id),  # Convertir ID a string para consistencia
                     "name": project.name,
                     "description": project.description,
                     "client": project.client,
@@ -58,7 +73,8 @@ async def read_projects(
                     "start_date": project.start_date.strftime("%Y-%m-%d") if project.start_date else None,
                     "end_date": project.end_date.strftime("%Y-%m-%d") if project.end_date else None,
                     "created_at": project.created_at.isoformat() if project.created_at else None,
-                    "updated_at": project.updated_at.isoformat() if project.updated_at else None
+                    "updated_at": project.updated_at.isoformat() if project.updated_at else None,
+                    "users": project_users  # Incluir la lista de usuarios asignados
                 }
                 project_list.append(project_dict)
                 print(f"Proyecto procesado: {project_dict['id']}, {project_dict['name']}, estado: {status}")
@@ -188,27 +204,72 @@ async def read_project(
     Durante el desarrollo, no requiere autenticación.
     """
     try:
+        # Buscar el proyecto en la base de datos
         project = db.query(Project).filter(Project.id == project_id).first()
-        if not project:
-            # Crear una respuesta de error con encabezados CORS
-            response = JSONResponse(
-                status_code=404,
-                content={"detail": "Project not found"}
-            )
-            return add_cors_headers(response)
         
-        # Convertir el proyecto a un diccionario para la respuesta JSON
+        if not project:
+            # Si no se encuentra el proyecto, devolver 404
+            return JSONResponse(
+                status_code=404,
+                content={"error": True, "message": "Proyecto no encontrado"}
+            )
+        
+        # Determinar el estado basado en el progreso
+        status = "Planificación"
+        if project.progress > 0 and project.progress < 100:
+            status = "En progreso"
+        elif project.progress >= 100:
+            status = "Completado"
+        
+        # Obtener los usuarios asignados a este proyecto
+        project_users = []
+        try:
+            if project.users:
+                for user in project.users:
+                    project_users.append({
+                        "id": str(user.id),  # Convertir ID a string para consistencia
+                        "name": user.name,
+                        "email": user.email,
+                        "role": user.role
+                    })
+                print(f"Usuarios encontrados para el proyecto {project.id}: {len(project_users)}")
+        except Exception as e:
+            print(f"Error al obtener usuarios del proyecto {project.id}: {e}")
+        
+        # Obtener las tareas asociadas a este proyecto
+        project_tasks = []
+        try:
+            tasks = db.query(Task).filter(Task.project_id == project_id).all()
+            for task in tasks:
+                project_tasks.append({
+                    "id": str(task.id),  # Convertir ID a string para consistencia
+                    "name": task.name,
+                    "status": task.status,
+                    "start_date": task.start_date.strftime("%Y-%m-%d") if task.start_date else None,
+                    "end_date": task.end_date.strftime("%Y-%m-%d") if task.end_date else None,
+                    "percent_done": task.percent_done,
+                    "resource": task.resource,
+                    "is_critical_path": task.is_critical_path,
+                    "color": task.color
+                })
+            print(f"Tareas encontradas para el proyecto {project.id}: {len(project_tasks)}")
+        except Exception as e:
+            print(f"Error al obtener tareas del proyecto {project.id}: {e}")
+        
+        # Convertir el proyecto a un diccionario
         project_dict = {
-            "id": project.id,
+            "id": str(project.id),  # Convertir ID a string para consistencia
             "name": project.name,
             "description": project.description,
             "client": project.client,
-            "status": "Planificación" if project.progress == 0 else ("En progreso" if project.progress < 100 else "Completado"),
+            "status": status,  # Calculamos el estado basado en el progreso
             "progress": project.progress,
             "start_date": project.start_date.strftime("%Y-%m-%d") if project.start_date else None,
             "end_date": project.end_date.strftime("%Y-%m-%d") if project.end_date else None,
             "created_at": project.created_at.isoformat() if project.created_at else None,
-            "updated_at": project.updated_at.isoformat() if project.updated_at else None
+            "updated_at": project.updated_at.isoformat() if project.updated_at else None,
+            "users": project_users,  # Incluir la lista de usuarios asignados
+            "tasks": project_tasks   # Incluir la lista de tareas asociadas
         }
         
         # Crear una respuesta JSON con los encabezados CORS
@@ -248,13 +309,71 @@ async def create_project(
             users = db.query(User).filter(User.id.in_(project_in.users)).all()
             db_project.users = users
         
+        # Agregar el proyecto a la sesión para obtener su ID
         db.add(db_project)
+        db.flush()  # Esto asigna un ID al proyecto sin confirmar la transacción
+        
+        # Crear tareas si se proporcionan
+        if hasattr(project_in, 'tasks') and project_in.tasks:
+            for task_data in project_in.tasks:
+                # Convertir fechas de string a objeto date si vienen como string
+                start_date = None
+                if hasattr(task_data, 'start_date') and task_data.start_date:
+                    if isinstance(task_data.start_date, str):
+                        try:
+                            start_date = datetime.strptime(task_data.start_date, "%Y-%m-%d").date()
+                        except Exception as e:
+                            print(f"Error al convertir start_date: {e}")
+                    else:
+                        start_date = task_data.start_date
+                
+                end_date = None
+                if hasattr(task_data, 'end_date') and task_data.end_date:
+                    if isinstance(task_data.end_date, str):
+                        try:
+                            end_date = datetime.strptime(task_data.end_date, "%Y-%m-%d").date()
+                        except Exception as e:
+                            print(f"Error al convertir end_date: {e}")
+                    else:
+                        end_date = task_data.end_date
+                
+                # Valores por defecto para campos opcionales
+                percent_done = task_data.percent_done if hasattr(task_data, 'percent_done') else 0
+                resource = task_data.resource if hasattr(task_data, 'resource') else None
+                is_critical_path = task_data.is_critical_path if hasattr(task_data, 'is_critical_path') else False
+                color = task_data.color if hasattr(task_data, 'color') else "#3b82f6"
+                
+                # Calcular la duración si hay fechas de inicio y fin
+                duration = "0 días"
+                if start_date and end_date:
+                    days = (end_date - start_date).days
+                    duration = f"{days} días"
+                
+                # Crear la tarea con todos los campos
+                db_task = Task(
+                    name=task_data.name,
+                    status=task_data.status,
+                    project_id=db_project.id,  # Asociar la tarea con el proyecto
+                    start_date=start_date,
+                    end_date=end_date,
+                    percent_done=percent_done,
+                    resource=resource,
+                    is_critical_path=is_critical_path,
+                    color=color,
+                    duration=duration,
+                    # Estos campos se pueden calcular o establecer valores por defecto
+                    start_percentage=0.0,
+                    duration_percentage=100.0
+                )
+                db.add(db_task)
+        
+        # Confirmar los cambios en la base de datos
         db.commit()
         db.refresh(db_project)
         
         # Convertir el proyecto a un diccionario para la respuesta JSON
         project_dict = {
-            "id": db_project.id,
+            "id": str(db_project.id),  # Convertir a string para consistencia
             "name": db_project.name,
             "description": db_project.description,
             "client": db_project.client,
@@ -263,7 +382,8 @@ async def create_project(
             "start_date": db_project.start_date.strftime("%Y-%m-%d") if db_project.start_date else None,
             "end_date": db_project.end_date.strftime("%Y-%m-%d") if db_project.end_date else None,
             "created_at": db_project.created_at.isoformat() if db_project.created_at else None,
-            "updated_at": db_project.updated_at.isoformat() if db_project.updated_at else None
+            "updated_at": db_project.updated_at.isoformat() if db_project.updated_at else None,
+            "users": [{"id": str(user.id), "name": user.name, "email": user.email} for user in db_project.users] if db_project.users else []
         }
         
         # Crear una respuesta JSON con los encabezados CORS
@@ -309,10 +429,75 @@ async def update_project(
         project.end_date = project_in.end_date
         project.progress = project_in.progress
         
+        # Determinar el estado basado en el progreso
+        status = "Planificación"
+        if project.progress > 0 and project.progress < 100:
+            status = "En progreso"
+        elif project.progress >= 100:
+            status = "Completado"
+        
         # Update users if provided
         if hasattr(project_in, 'users') and project_in.users:
             users = db.query(User).filter(User.id.in_(project_in.users)).all()
             project.users = users
+        
+        # Update tasks if provided
+        if hasattr(project_in, 'tasks') and project_in.tasks:
+            # Eliminar tareas existentes para evitar duplicados
+            db.query(Task).filter(Task.project_id == project_id).delete()
+            
+            # Crear nuevas tareas con todos los campos
+            for task_data in project_in.tasks:
+                # Convertir fechas de string a objeto date si vienen como string
+                start_date = None
+                if hasattr(task_data, 'start_date') and task_data.start_date:
+                    if isinstance(task_data.start_date, str):
+                        try:
+                            start_date = datetime.strptime(task_data.start_date, "%Y-%m-%d").date()
+                        except Exception as e:
+                            print(f"Error al convertir start_date: {e}")
+                    else:
+                        start_date = task_data.start_date
+                
+                end_date = None
+                if hasattr(task_data, 'end_date') and task_data.end_date:
+                    if isinstance(task_data.end_date, str):
+                        try:
+                            end_date = datetime.strptime(task_data.end_date, "%Y-%m-%d").date()
+                        except Exception as e:
+                            print(f"Error al convertir end_date: {e}")
+                    else:
+                        end_date = task_data.end_date
+                
+                # Valores por defecto para campos opcionales
+                percent_done = task_data.percent_done if hasattr(task_data, 'percent_done') else 0
+                resource = task_data.resource if hasattr(task_data, 'resource') else None
+                is_critical_path = task_data.is_critical_path if hasattr(task_data, 'is_critical_path') else False
+                color = task_data.color if hasattr(task_data, 'color') else "#3b82f6"
+                
+                # Calcular la duración si hay fechas de inicio y fin
+                duration = "0 días"
+                if start_date and end_date:
+                    days = (end_date - start_date).days
+                    duration = f"{days} días"
+                
+                # Crear la tarea con todos los campos
+                db_task = Task(
+                    name=task_data.name,
+                    status=task_data.status,
+                    project_id=project.id,
+                    start_date=start_date,
+                    end_date=end_date,
+                    percent_done=percent_done,
+                    resource=resource,
+                    is_critical_path=is_critical_path,
+                    color=color,
+                    duration=duration,
+                    # Estos campos se pueden calcular o establecer valores por defecto
+                    start_percentage=0.0,
+                    duration_percentage=100.0
+                )
+                db.add(db_task)
         
         db.add(project)
         db.commit()
@@ -320,16 +505,27 @@ async def update_project(
         
         # Convertir el proyecto a un diccionario para la respuesta JSON
         project_dict = {
-            "id": project.id,
+            "id": str(project.id),  # Convertir a string para consistencia
             "name": project.name,
             "description": project.description,
             "client": project.client,
-            "status": "Planificación" if project.progress == 0 else ("En progreso" if project.progress < 100 else "Completado"),
+            "status": status,  # Usar el estado calculado basado en el progreso
             "progress": project.progress,
             "start_date": project.start_date.strftime("%Y-%m-%d") if project.start_date else None,
             "end_date": project.end_date.strftime("%Y-%m-%d") if project.end_date else None,
             "created_at": project.created_at.isoformat() if project.created_at else None,
-            "updated_at": project.updated_at.isoformat() if project.updated_at else None
+            "updated_at": project.updated_at.isoformat() if project.updated_at else None,
+            "users": [{"id": str(user.id), "name": user.name, "email": user.email} for user in project.users] if project.users else [],
+            "tasks": [
+                {
+                    "id": str(task.id),
+                    "name": task.name,
+                    "status": task.status,
+                    "start_date": task.start_date.strftime("%Y-%m-%d") if task.start_date else None,
+                    "end_date": task.end_date.strftime("%Y-%m-%d") if task.end_date else None,
+                    "percent_done": task.percent_done if hasattr(task, 'percent_done') else 0
+                } for task in project.tasks
+            ] if project.tasks else []
         }
         
         # Crear una respuesta JSON con los encabezados CORS

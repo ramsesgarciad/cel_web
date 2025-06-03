@@ -1,0 +1,231 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Panel de Administración - Caribbean Embedded Labs{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Panel de Administración</h1>
+        <p class="text-gray-600">Bienvenido al panel de administración de Caribbean Embedded Labs</p>
+    </div>
+
+    <!-- Resumen de estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-500 mr-4">
+                    <i class="fas fa-project-diagram text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500">Total de Proyectos</p>
+                    <h2 class="text-2xl font-bold">{{ total_projects }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-500 mr-4">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500">Proyectos Completados</p>
+                    <h2 class="text-2xl font-bold">{{ completed_projects }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-500 mr-4">
+                    <i class="fas fa-clock text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500">En Progreso</p>
+                    <h2 class="text-2xl font-bold">{{ in_progress_projects }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-500 mr-4">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500">Total de Usuarios</p>
+                    <h2 class="text-2xl font-bold">{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proyectos recientes -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold">Proyectos Recientes</h3>
+            </div>
+            <div class="p-6">
+                {% if recent_projects %}
+                    <div class="space-y-4">
+                        {% for project in recent_projects %}
+                            <div class="border-l-4 
+                                {% if project.status == 'Completado' %}
+                                    border-green-500
+                                {% elif project.status == 'En progreso' %}
+                                    border-blue-500
+                                {% elif project.status == 'En pausa' %}
+                                    border-yellow-500
+                                {% elif project.status == 'Cancelado' %}
+                                    border-red-500
+                                {% else %}
+                                    border-gray-500
+                                {% endif %}
+                                pl-4 py-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-medium">{{ project.name }}</h4>
+                                        <p class="text-sm text-gray-600">Cliente: {{ project.client.name }}</p>
+                                        <div class="mt-1">
+                                            <div class="w-48 bg-gray-200 rounded-full h-1.5">
+                                                <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ project.progress }}%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-0.5">{{ project.progress }}% completado</p>
+                                        </div>
+                                    </div>
+                                    <a href="/admin/projects/{{ project.id }}/update" class="text-blue-500 hover:underline text-sm">
+                                        Ver detalles
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="/admin/projects" class="text-blue-500 hover:underline">Ver todos los proyectos</a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">No hay proyectos registrados.</p>
+                        <a href="/admin/projects/new" class="mt-2 inline-block text-blue-500 hover:underline">Crear nuevo proyecto</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Actualizaciones recientes -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold">Actualizaciones Recientes</h3>
+            </div>
+            <div class="p-6">
+                {% if recent_updates %}
+                    <div class="space-y-4">
+                        {% for update in recent_updates %}
+                            <div class="border-l-4 border-blue-500 pl-4 py-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-medium">{{ update.project.name }}</h4>
+                                        <p class="text-gray-600">{{ update.content }}</p>
+                                        <p class="text-xs text-gray-500 mt-1">Por: {{ update.created_by.name }}</p>
+                                    </div>
+                                    <span class="text-xs text-gray-500">{{ update.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">No hay actualizaciones recientes.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos y estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Distribución de Proyectos por Estado</h3>
+            <div class="h-64 flex items-center justify-center">
+                <canvas id="projectStatusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold mb-4">Proyectos por Mes</h3>
+            <div class="h-64 flex items-center justify-center">
+                <canvas id="projectsPerMonthChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Datos para el gráfico de estado de proyectos
+        const statusCtx = document.getElementById('projectStatusChart').getContext('2d');
+        const statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completados', 'En Progreso', 'Planificación', 'En Pausa', 'Cancelados'],
+                datasets: [{
+                    data: [
+                        {{ completed_projects }}, 
+                        {{ in_progress_projects }},
+                        {{ total_projects - completed_projects - in_progress_projects }}
+                    ],
+                    backgroundColor: [
+                        '#10b981', // verde
+                        '#3b82f6', // azul
+                        '#6b7280', // gris
+                        '#f59e0b', // amarillo
+                        '#ef4444'  // rojo
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+        
+        // Datos para el gráfico de proyectos por mes
+        const monthlyCtx = document.getElementById('projectsPerMonthChart').getContext('2d');
+        const monthlyChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Proyectos creados',
+                    data: [5, 8, 3, 7, 6, 4, 9, 2, 10, 7, 5, 4], // Datos de ejemplo
+                    backgroundColor: '#3b82f6',
+                    borderColor: '#2563eb',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -2,7 +2,16 @@
  * API client for communicating with the FastAPI backend
  */
 
-const API_URL = 'http://161.97.172.97:8000/api';
+// Configuración para desarrollo local
+// const API_URL = 'http://localhost:8000';
+
+// Configuración para producción usando el subdominio api
+// NOTA: Incluir /api al final ya que el proxy de Nginx está configurado para esta ruta
+const API_URL = 'https://api.caribbeanembeddedlabs.com/api';
+
+// URL alternativa en caso de que el subdominio no funcione
+// const API_URL = 'http://161.97.172.97:8000';
+
 
 /**
  * Fetch wrapper with authentication and error handling
@@ -24,7 +33,6 @@ export const fetchWithAuth = async (url, options = {}) => {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Origin': typeof window !== 'undefined' ? window.location.origin : '',
-      'Access-Control-Allow-Origin': '*',
       ...options.headers,
     };
     
@@ -36,47 +44,83 @@ export const fetchWithAuth = async (url, options = {}) => {
     const apiUrl = API_URL;
     const fullUrl = url.startsWith('http') ? url : `${apiUrl}${url}`;
     
+    console.log(`URL completa de la petición: ${fullUrl}`);
+    
+    // Configurar un timeout para la petición
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 segundos de timeout
+    
     // Hacer la petición con fetch
     const response = await fetch(fullUrl, {
       ...options,
       headers,
       credentials: 'same-origin',
+      signal: controller.signal,
     });
+    
+    // Limpiar el timeout
+    clearTimeout(timeoutId);
     
     console.log(`Respuesta de ${url}: ${response.status} ${response.statusText}`);
     
-    // Verificar si la respuesta es exitosa
-    if (!response.ok) {
-      console.error(`Error en la respuesta: ${response.status} ${response.statusText}`);
-      
-      // Intentar obtener el texto del error
-      let errorDetails = '';
-      try {
-        const errorText = await response.text();
-        console.error(`Texto del error: ${errorText}`);
-        errorDetails = errorText;
-      } catch (textError) {
-        console.error(`No se pudo obtener el texto del error: ${textError}`);
+    // Manejar diferentes códigos de estado HTTP
+    if (response.status === 404) {
+      console.warn(`Recurso no encontrado: ${url}`);
+      return { error: 'not_found', message: 'Recurso no encontrado' };
+    }
+    
+    if (response.status === 401) {
+      console.warn('Sesión expirada o no autorizada');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
       }
-      
-      // Crear un error con información detallada
-      const error = new Error(`Error ${response.status}: ${response.statusText}`);
-      error.status = response.status;
-      error.details = errorDetails;
-      throw error;
+      return { error: 'unauthorized', message: 'Sesión expirada o no autorizada' };
+    }
+    
+    // Si la respuesta no es exitosa, intentar obtener detalles del error
+    if (!response.ok) {
+      try {
+        const errorData = await response.json();
+        return { error: 'http_error', status: response.status, message: errorData.detail || errorData.message || `Error HTTP: ${response.status} ${response.statusText}` };
+      } catch (parseError) {
+        return { error: 'http_error', status: response.status, message: `Error HTTP: ${response.status} ${response.statusText}` };
+      }
     }
     
     // Verificar si la respuesta es JSON
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
-      return await response.json();
+      try {
+        const jsonData = await response.json();
+        return jsonData;
+      } catch (jsonError) {
+        console.error('Error al parsear la respuesta JSON:', jsonError);
+        return { error: 'parse_error', message: 'Error al procesar la respuesta del servidor' };
+      }
     }
     
     // Si no es JSON, devolver el texto
-    return await response.text();
+    try {
+      const textData = await response.text();
+      return textData;
+    } catch (textError) {
+      console.error('Error al obtener el texto de la respuesta:', textError);
+      return { error: 'parse_error', message: 'Error al procesar la respuesta del servidor' };
+    }
   } catch (error) {
     console.error(`Error en fetchWithAuth para ${url}:`, error);
-    throw error;
+    
+    // Manejar errores de red o timeout
+    if (error.name === 'AbortError') {
+      return { error: 'timeout', message: 'La petición ha excedido el tiempo límite' };
+    }
+    
+    if (error.message && error.message.includes('Failed to fetch')) {
+      return { error: 'network', message: 'Error de conexión. Compruebe su conexión a internet.' };
+    }
+    
+    return { error: 'unknown', message: error.message || 'Error desconocido en la petición' };
   }
 };
 
@@ -89,8 +133,12 @@ function setAuthToken(token, userData) {
   localStorage.setItem('user', JSON.stringify(userData));
   
   // Store in cookie for middleware access
-  // Set cookie to expire in 7 days, be accessible only via HTTP (not JS), and be valid for the entire site
-  document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Strict; HttpOnly`;
+  // Set cookie to expire in 7 days and be valid for the entire site
+  document.cookie = `authToken=${token}; path=/; max-age=604800; SameSite=Strict`;
+  
+  // También guardar los datos del usuario en una cookie para el middleware
+  // No usar HttpOnly para que el middleware pueda acceder a ella
+  document.cookie = `userData=${encodeURIComponent(JSON.stringify(userData))}; path=/; max-age=604800; SameSite=Strict`;
 }
 
 /**
@@ -232,8 +280,8 @@ export const authApi = {
  * Projects API
  */
 export const projectsApi = {
-  getAll: async () => {
-    return fetchWithAuth('/projects');
+  getAll: async (skip = 0, limit = 100) => {
+    return fetchWithAuth(`/projects?skip=${skip}&limit=${limit}`);
   },
   
   getById: async (id) => {

@@ -21,6 +21,10 @@ class Settings(BaseSettings):
         "http://localhost:3000",  # NextJS frontend
         "http://127.0.0.1:3000",  # NextJS frontend alternative URL
         "http://localhost:8000",  # FastAPI backend
+        "http://localhost:3001",  # NextJS frontend (puerto alternativo)
+        "http://127.0.0.1:3001",  # NextJS frontend (puerto alternativo)
+        "https://caribbeanembeddedlabs.com",  # Dominio de producción
+        "https://www.caribbeanembeddedlabs.com",  # Dominio de producción con www
         "*",  # Allow all origins (for development only)
     ]
     

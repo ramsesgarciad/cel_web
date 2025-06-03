@@ -1,0 +1,492 @@
+2025-06-01 22:10:23,234 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:10:23,235 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:10:23,235 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:10:24,784 - ERROR - Error al iniciar sesión: 422 - {"detail":[{"type":"missing","loc":["body","username"],"msg":"Field required","input":null},{"type":"missing","loc":["body","password"],"msg":"Field required","input":null}]}
+2025-06-01 22:10:24,785 - ERROR - No se pudo iniciar sesión como administrador. Abortando validación.
+2025-06-01 22:10:24,785 - ERROR - 
+❌ La validación falló
+2025-06-01 22:12:44,701 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:12:44,701 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:12:44,701 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:12:45,034 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:12:45,034 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:12:45,034 - INFO - 1. Listando usuarios...
+2025-06-01 22:12:45,051 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:12:45,051 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:12:45,066 - ERROR - Error al crear usuario: 422 - {"detail":[{"type":"missing","loc":["body","role"],"msg":"Field required","input":{"email":"test_1748808764@example.com","name":"Test User","password":"Test123!","is_admin":false,"is_active":true}}]}
+2025-06-01 22:12:45,066 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:12:45,075 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:12:45,075 - INFO - 1. Listando proyectos...
+2025-06-01 22:12:45,088 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:12:45,089 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:12:45,100 - ERROR - Error al crear proyecto: 422 - {"detail":[{"type":"missing","loc":["body","client"],"msg":"Field required","input":{"name":"Test Project 1748808764","description":"Project created for testing CRUD operations","client_id":"1","status":"in_progress","progress":50}},{"type":"missing","loc":["body","start_date"],"msg":"Field required","input":{"name":"Test Project 1748808764","description":"Project created for testing CRUD operations","client_id":"1","status":"in_progress","progress":50}},{"type":"missing","loc":["body","end_date"],"msg":"Field required","input":{"name":"Test Project 1748808764","description":"Project created for testing CRUD operations","client_id":"1","status":"in_progress","progress":50}}]}
+2025-06-01 22:12:45,100 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:12:45,100 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:12:45,100 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:12:45,101 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:12:45,103 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:12:45,103 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:12:45,104 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:12:45,104 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:12:45,105 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:12:45,105 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:12:45,106 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:12:45,107 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:12:45,108 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:12:45,108 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:12:45,109 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:12:45,109 - INFO - Validación CRUD: FALLÓ
+2025-06-01 22:12:45,109 - INFO - Plantillas corregidas: No
+2025-06-01 22:12:45,109 - INFO - 
+Problemas encontrados en CRUD:
+2025-06-01 22:12:45,109 - INFO - - Error al crear usuario: 422
+2025-06-01 22:12:45,109 - INFO - - Error al crear proyecto: 422
+2025-06-01 22:12:45,109 - ERROR - 
+❌ La validación falló
+2025-06-01 22:14:14,094 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:14:14,094 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:14:14,094 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:14:14,442 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:14:14,442 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:14:14,442 - INFO - 1. Listando usuarios...
+2025-06-01 22:14:14,458 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:14:14,458 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:14:14,769 - INFO - Usuario creado con ID: 6
+2025-06-01 22:14:14,769 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:14:14,780 - INFO - Usuario obtenido: test_1748808854@example.com
+2025-06-01 22:14:14,780 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:14:14,798 - ERROR - Error al actualizar usuario: 422 - {"detail":[{"type":"missing","loc":["body","email"],"msg":"Field required","input":{"name":"Updated User 1748808854"}},{"type":"missing","loc":["body","role"],"msg":"Field required","input":{"name":"Updated User 1748808854"}}]}
+2025-06-01 22:14:14,799 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:14:14,815 - INFO - Usuario eliminado correctamente
+2025-06-01 22:14:14,815 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:14:14,832 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:14:14,832 - INFO - 1. Listando proyectos...
+2025-06-01 22:14:14,849 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:14:14,850 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:14:14,872 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:14:14,872 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:14:14,886 - INFO - Proyecto obtenido: Test Project 1748808854
+2025-06-01 22:14:14,887 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:14:14,897 - ERROR - Error al actualizar proyecto: 422 - {"detail":[{"type":"missing","loc":["body","client"],"msg":"Field required","input":{"name":"Updated Project 1748808854","progress":75,"status":"completed"}},{"type":"missing","loc":["body","description"],"msg":"Field required","input":{"name":"Updated Project 1748808854","progress":75,"status":"completed"}},{"type":"missing","loc":["body","start_date"],"msg":"Field required","input":{"name":"Updated Project 1748808854","progress":75,"status":"completed"}},{"type":"missing","loc":["body","end_date"],"msg":"Field required","input":{"name":"Updated Project 1748808854","progress":75,"status":"completed"}}]}
+2025-06-01 22:14:14,897 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:14:14,916 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:14:14,917 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:14:14,917 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:14:14,917 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:14:14,918 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:14:14,918 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:14:14,918 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:14:14,918 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:14:14,919 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:14:14,920 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:14:14,920 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:14:14,920 - INFO - Validación CRUD: FALLÓ
+2025-06-01 22:14:14,920 - INFO - Plantillas corregidas: No
+2025-06-01 22:14:14,920 - INFO - 
+Problemas encontrados en CRUD:
+2025-06-01 22:14:14,920 - INFO - - Error al actualizar usuario: 422
+2025-06-01 22:14:14,920 - INFO - - Error al actualizar proyecto: 422
+2025-06-01 22:14:14,920 - ERROR - 
+❌ La validación falló
+2025-06-01 22:15:28,779 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:15:28,780 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:15:28,780 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:15:29,119 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:15:29,120 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:15:29,120 - INFO - 1. Listando usuarios...
+2025-06-01 22:15:29,140 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:15:29,140 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:15:29,473 - INFO - Usuario creado con ID: 6
+2025-06-01 22:15:29,473 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:15:29,484 - INFO - Usuario obtenido: test_1748808928@example.com
+2025-06-01 22:15:29,484 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:15:29,505 - INFO - Usuario actualizado: Updated User 1748808929
+2025-06-01 22:15:29,505 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:15:29,519 - INFO - Usuario eliminado correctamente
+2025-06-01 22:15:29,519 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:15:29,532 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:15:29,532 - INFO - 1. Listando proyectos...
+2025-06-01 22:15:29,544 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:15:29,544 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:15:29,559 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:15:29,559 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:15:29,569 - INFO - Proyecto obtenido: Test Project 1748808928
+2025-06-01 22:15:29,569 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:15:29,587 - INFO - Proyecto actualizado: Updated Project 1748808929
+2025-06-01 22:15:29,587 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:15:29,601 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:15:29,601 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:15:29,601 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:15:29,602 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:15:29,602 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:15:29,602 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:15:29,602 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:15:29,603 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:15:29,603 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:15:29,603 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:15:29,603 - INFO - Validación CRUD: OK
+2025-06-01 22:15:29,603 - INFO - Plantillas corregidas: No
+2025-06-01 22:15:29,604 - INFO - 
+✅ Validación completada con éxito
+2025-06-01 22:20:14,722 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:21:31,629 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:21:31,647 - INFO - Tomando snapshot inicial de la base de datos...
+2025-06-01 22:21:31,650 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:21:31,651 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:21:31,651 - INFO - Snapshot inicial guardado en db_snapshot_before.json
+2025-06-01 22:21:31,651 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:21:31,652 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:21:31,972 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:21:31,972 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:21:31,973 - INFO - 1. Listando usuarios...
+2025-06-01 22:21:31,985 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:21:31,985 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:21:32,296 - INFO - Usuario creado con ID: 6
+2025-06-01 22:21:32,296 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:21:32,307 - INFO - Usuario obtenido: test_1748809291@example.com
+2025-06-01 22:21:32,308 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:21:32,324 - INFO - Usuario actualizado: Updated User 1748809292
+2025-06-01 22:21:32,324 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:21:32,345 - INFO - Usuario eliminado correctamente
+2025-06-01 22:21:32,345 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:21:32,359 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:21:32,359 - INFO - 1. Listando proyectos...
+2025-06-01 22:21:32,373 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:21:32,374 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:21:32,390 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:21:32,390 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:21:32,398 - INFO - Proyecto obtenido: Test Project 1748809291
+2025-06-01 22:21:32,398 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:21:32,411 - INFO - Proyecto actualizado: Updated Project 1748809292
+2025-06-01 22:21:32,411 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:21:32,427 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:21:32,427 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:21:32,428 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:21:32,428 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:21:32,428 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:21:32,429 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:21:32,429 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:21:32,429 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:21:32,429 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:21:32,429 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:21:32,430 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:21:32,430 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:21:32,430 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:21:32,430 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:21:32,430 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:21:32,430 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:21:32,430 - INFO - Validación CRUD: OK
+2025-06-01 22:21:32,430 - INFO - Plantillas corregidas: No
+2025-06-01 22:21:32,431 - INFO - 
+=== Verificando cambios en la base de datos ===
+2025-06-01 22:21:32,434 - INFO - No se detectaron cambios en la tabla users
+2025-06-01 22:21:32,434 - INFO - No se detectaron cambios en la tabla projects
+2025-06-01 22:21:32,435 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:21:32,435 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:21:32,436 - INFO - Snapshot final guardado en db_snapshot_after.json
+2025-06-01 22:21:32,436 - WARNING - 
+⚠️ Validación completada pero NO se detectaron cambios en la base de datos
+2025-06-01 22:21:32,436 - WARNING - Esto podría indicar que las operaciones CRUD no están afectando realmente a la base de datos
+2025-06-01 22:22:59,819 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:22:59,830 - INFO - Tomando snapshot inicial de la base de datos...
+2025-06-01 22:22:59,834 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:22:59,834 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:22:59,835 - INFO - Snapshot inicial guardado en db_snapshot_before.json
+2025-06-01 22:22:59,835 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:22:59,835 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:23:00,156 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:23:00,156 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:23:00,156 - INFO - 1. Listando usuarios...
+2025-06-01 22:23:00,173 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:23:00,173 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:23:00,493 - INFO - Usuario creado con ID: 6
+2025-06-01 22:23:00,493 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:23:00,505 - INFO - Usuario obtenido: test_1748809379@example.com
+2025-06-01 22:23:00,505 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:23:00,523 - INFO - Usuario actualizado: Updated User 1748809380
+2025-06-01 22:23:00,524 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:23:00,539 - INFO - Usuario eliminado correctamente
+2025-06-01 22:23:00,540 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:23:00,553 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:23:00,553 - INFO - 1. Listando proyectos...
+2025-06-01 22:23:00,566 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:23:00,566 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:23:00,582 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:23:00,582 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:23:00,592 - INFO - Proyecto obtenido: Test Project 1748809379
+2025-06-01 22:23:00,592 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:23:00,613 - INFO - Proyecto actualizado: Updated Project 1748809380
+2025-06-01 22:23:00,613 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:23:00,627 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:23:00,627 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:23:00,627 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:23:00,627 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:23:00,628 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:23:00,628 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:23:00,628 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:23:00,629 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:23:00,629 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:23:00,629 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:23:00,629 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:23:00,629 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:23:00,630 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:23:00,630 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:23:00,630 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:23:00,630 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:23:00,630 - INFO - Validación CRUD: OK
+2025-06-01 22:23:00,630 - INFO - Plantillas corregidas: No
+2025-06-01 22:23:00,630 - INFO - 
+=== Verificando cambios en la base de datos ===
+2025-06-01 22:23:00,633 - INFO - No se detectaron cambios en la tabla users
+2025-06-01 22:23:00,635 - INFO - No se detectaron cambios en la tabla projects
+2025-06-01 22:23:00,635 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:23:00,635 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:23:00,636 - INFO - Snapshot final guardado en db_snapshot_after.json
+2025-06-01 22:23:00,637 - WARNING - 
+⚠️ Validación completada pero NO se detectaron cambios en la base de datos
+2025-06-01 22:23:00,637 - WARNING - Esto podría indicar que las operaciones CRUD no están afectando realmente a la base de datos
+2025-06-01 22:25:08,400 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:25:08,411 - INFO - Tomando snapshot inicial de la base de datos...
+2025-06-01 22:25:08,414 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:25:08,414 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:25:08,415 - INFO - Snapshot inicial guardado en db_snapshot_before.json
+2025-06-01 22:25:08,415 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:25:08,415 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:25:08,768 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:25:08,768 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:25:08,768 - INFO - 1. Listando usuarios...
+2025-06-01 22:25:08,786 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:25:08,786 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:25:09,138 - INFO - Usuario creado con ID: 6
+2025-06-01 22:25:09,138 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:25:09,149 - INFO - Usuario obtenido: test_1748809508@example.com
+2025-06-01 22:25:09,150 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:25:09,172 - INFO - Usuario actualizado: Updated User 1748809509
+2025-06-01 22:25:09,172 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:25:09,192 - INFO - Usuario eliminado correctamente
+2025-06-01 22:25:09,192 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:25:09,235 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:25:09,235 - INFO - 1. Listando proyectos...
+2025-06-01 22:25:09,256 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:25:09,256 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:25:09,384 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:25:09,385 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:25:09,401 - INFO - Proyecto obtenido: Test Project 1748809508
+2025-06-01 22:25:09,402 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:25:09,443 - INFO - Proyecto actualizado: Updated Project 1748809509
+2025-06-01 22:25:09,443 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:25:09,462 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:25:09,462 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:25:09,462 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:25:09,463 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:25:09,463 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:25:09,463 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:25:09,464 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:25:09,464 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:25:09,464 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:25:09,464 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:25:09,464 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:25:09,465 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:25:09,465 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:25:09,465 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:25:09,465 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:25:09,465 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:25:09,465 - INFO - Validación CRUD: OK
+2025-06-01 22:25:09,465 - INFO - Plantillas corregidas: No
+2025-06-01 22:25:09,466 - INFO - 
+=== Verificando cambios en la base de datos ===
+2025-06-01 22:25:09,469 - INFO - No se detectaron cambios en la tabla users
+2025-06-01 22:25:09,470 - INFO - No se detectaron cambios en la tabla projects
+2025-06-01 22:25:09,471 - INFO - 
+=== Ejecutando consultas SQL directas ===
+2025-06-01 22:25:09,471 - ERROR - Error al ejecutar consultas SQL directas: name 'time' is not defined
+2025-06-01 22:25:09,471 - ERROR - Traceback (most recent call last):
+  File "/home/cel_web/api/validate_crud_runner.py", line 136, in <module>
+    test_user_email = f"direct_sql_test_{int(time.time())}@example.com"
+NameError: name 'time' is not defined
+
+2025-06-01 22:25:09,472 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:25:09,472 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:25:09,473 - INFO - Snapshot final guardado en db_snapshot_after.json
+2025-06-01 22:25:09,474 - WARNING - 
+⚠️ Validación completada pero NO se detectaron cambios en la base de datos
+2025-06-01 22:25:09,474 - WARNING - Esto podría indicar que las operaciones CRUD no están afectando realmente a la base de datos
+2025-06-01 22:25:40,507 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:25:40,516 - INFO - Tomando snapshot inicial de la base de datos...
+2025-06-01 22:25:40,518 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:25:40,518 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:25:40,519 - INFO - Snapshot inicial guardado en db_snapshot_before.json
+2025-06-01 22:25:40,519 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:25:40,519 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:25:40,829 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:25:40,830 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:25:40,830 - INFO - 1. Listando usuarios...
+2025-06-01 22:25:40,842 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:25:40,842 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:25:41,145 - INFO - Usuario creado con ID: 6
+2025-06-01 22:25:41,145 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:25:41,157 - INFO - Usuario obtenido: test_1748809540@example.com
+2025-06-01 22:25:41,157 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:25:41,174 - INFO - Usuario actualizado: Updated User 1748809541
+2025-06-01 22:25:41,174 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:25:41,187 - INFO - Usuario eliminado correctamente
+2025-06-01 22:25:41,188 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:25:41,200 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:25:41,200 - INFO - 1. Listando proyectos...
+2025-06-01 22:25:41,215 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:25:41,216 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:25:41,229 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:25:41,229 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:25:41,236 - INFO - Proyecto obtenido: Test Project 1748809540
+2025-06-01 22:25:41,236 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:25:41,247 - INFO - Proyecto actualizado: Updated Project 1748809541
+2025-06-01 22:25:41,247 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:25:41,257 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:25:41,258 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:25:41,258 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:25:41,258 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:25:41,258 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:25:41,258 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:25:41,259 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:25:41,260 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:25:41,260 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:25:41,260 - INFO - Validación CRUD: OK
+2025-06-01 22:25:41,260 - INFO - Plantillas corregidas: No
+2025-06-01 22:25:41,260 - INFO - 
+=== Verificando cambios en la base de datos ===
+2025-06-01 22:25:41,262 - INFO - No se detectaron cambios en la tabla users
+2025-06-01 22:25:41,263 - INFO - No se detectaron cambios en la tabla projects
+2025-06-01 22:25:41,263 - INFO - 
+=== Ejecutando consultas SQL directas ===
+2025-06-01 22:25:41,263 - ERROR - Error al ejecutar consultas SQL directas: name 'text' is not defined
+2025-06-01 22:25:41,264 - ERROR - Traceback (most recent call last):
+  File "/home/cel_web/api/validate_crud_runner.py", line 139, in <module>
+    text(f"INSERT INTO users (name, email, hashed_password, is_active, role) "
+NameError: name 'text' is not defined
+
+2025-06-01 22:25:41,264 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:25:41,265 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:25:41,265 - INFO - Snapshot final guardado en db_snapshot_after.json
+2025-06-01 22:25:41,266 - WARNING - 
+⚠️ Validación completada pero NO se detectaron cambios en la base de datos
+2025-06-01 22:25:41,266 - WARNING - Esto podría indicar que las operaciones CRUD no están afectando realmente a la base de datos
+2025-06-01 22:26:07,428 - INFO - === Iniciando validación completa de CRUD y plantillas ===
+2025-06-01 22:26:07,440 - INFO - Tomando snapshot inicial de la base de datos...
+2025-06-01 22:26:07,444 - INFO - Snapshot tomado de la tabla users: 5 registros
+2025-06-01 22:26:07,445 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:26:07,446 - INFO - Snapshot inicial guardado en db_snapshot_before.json
+2025-06-01 22:26:07,446 - INFO - Ejecutando métodos de validación individuales...
+2025-06-01 22:26:07,446 - INFO - Intentando iniciar sesión como administrador...
+2025-06-01 22:26:07,776 - INFO - Inicio de sesión exitoso como administrador
+2025-06-01 22:26:07,776 - INFO - 
+=== Validando operaciones CRUD para usuarios ===
+2025-06-01 22:26:07,776 - INFO - 1. Listando usuarios...
+2025-06-01 22:26:07,793 - INFO - Se encontraron 5 usuarios
+2025-06-01 22:26:07,793 - INFO - 2. Creando usuario de prueba...
+2025-06-01 22:26:08,111 - INFO - Usuario creado con ID: 6
+2025-06-01 22:26:08,111 - INFO - 3. Obteniendo detalles del usuario 6...
+2025-06-01 22:26:08,121 - INFO - Usuario obtenido: test_1748809567@example.com
+2025-06-01 22:26:08,121 - INFO - 4. Actualizando usuario 6...
+2025-06-01 22:26:08,138 - INFO - Usuario actualizado: Updated User 1748809568
+2025-06-01 22:26:08,138 - INFO - 5. Eliminando usuario 6...
+2025-06-01 22:26:08,154 - INFO - Usuario eliminado correctamente
+2025-06-01 22:26:08,154 - INFO - 
+=== Validando operaciones CRUD para proyectos ===
+2025-06-01 22:26:08,166 - INFO - Cliente seleccionado para el proyecto: 1
+2025-06-01 22:26:08,166 - INFO - 1. Listando proyectos...
+2025-06-01 22:26:08,174 - INFO - Se encontraron 5 proyectos
+2025-06-01 22:26:08,174 - INFO - 2. Creando proyecto de prueba...
+2025-06-01 22:26:08,186 - INFO - Proyecto creado con ID: 6
+2025-06-01 22:26:08,186 - INFO - 3. Obteniendo detalles del proyecto 6...
+2025-06-01 22:26:08,194 - INFO - Proyecto obtenido: Test Project 1748809567
+2025-06-01 22:26:08,194 - INFO - 4. Actualizando proyecto 6...
+2025-06-01 22:26:08,207 - INFO - Proyecto actualizado: Updated Project 1748809568
+2025-06-01 22:26:08,207 - INFO - 5. Eliminando proyecto 6...
+2025-06-01 22:26:08,219 - INFO - Proyecto eliminado correctamente
+2025-06-01 22:26:08,219 - INFO - 
+=== Limpiando recursos creados ===
+2025-06-01 22:26:08,219 - INFO - 
+=== Analizando plantillas Jinja2 ===
+2025-06-01 22:26:08,219 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/projects.html
+2025-06-01 22:26:08,220 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_form.html
+2025-06-01 22:26:08,220 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/project_update.html
+2025-06-01 22:26:08,220 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/users.html
+2025-06-01 22:26:08,220 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/index.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/admin/base.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/projects.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/project_detail.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/profile.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/index.html
+2025-06-01 22:26:08,221 - INFO - Analizando plantilla: /home/cel_web/api/templates/dashboard/base.html
+2025-06-01 22:26:08,221 - INFO - No se encontraron problemas en las plantillas
+2025-06-01 22:26:08,221 - INFO - 
+=== RESUMEN DE VALIDACIÓN ===
+2025-06-01 22:26:08,221 - INFO - Validación CRUD: OK
+2025-06-01 22:26:08,221 - INFO - Plantillas corregidas: No
+2025-06-01 22:26:08,222 - INFO - 
+=== Verificando cambios en la base de datos ===
+2025-06-01 22:26:08,224 - INFO - No se detectaron cambios en la tabla users
+2025-06-01 22:26:08,224 - INFO - No se detectaron cambios en la tabla projects
+2025-06-01 22:26:08,224 - INFO - 
+=== Ejecutando consultas SQL directas ===
+2025-06-01 22:26:08,228 - INFO - Insertado usuario de prueba directo en SQL: direct_sql_test_1748809568@example.com
+2025-06-01 22:26:08,228 - INFO - Usuario encontrado en la base de datos: True
+2025-06-01 22:26:08,228 - INFO - ✅ La conexión directa a la base de datos funciona correctamente
+2025-06-01 22:26:08,229 - INFO - Snapshot tomado de la tabla users: 6 registros
+2025-06-01 22:26:08,229 - INFO - Snapshot tomado de la tabla projects: 5 registros
+2025-06-01 22:26:08,230 - INFO - Snapshot final guardado en db_snapshot_after.json
+2025-06-01 22:26:08,230 - INFO - 
+✅ Validación completada con éxito y se detectaron cambios en la base de datos
